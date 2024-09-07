@@ -28,8 +28,8 @@ module "regions" {
 
 # This allows us to randomize the region for the resource group.
 resource "random_integer" "region_index" {
-  min = 0
   max = length(module.regions.regions) - 1
+  min = 0
 }
 ## End of section to provide a random Azure region for the resource group
 
@@ -41,20 +41,20 @@ module "naming" {
 
 # This is required for resource modules
 resource "azurerm_resource_group" "this" {
-  name     = module.naming.resource_group.name_unique
   location = module.regions.regions[random_integer.region_index.result].name
+  name     = module.naming.resource_group.name_unique
 }
 
 resource "random_password" "admin_password" {
   length           = 16
-  special          = true
   override_special = "!#$%&*()-_=+[]{}<>:?"
+  special          = true
 }
 
 resource "azurerm_user_assigned_identity" "this" {
+  location            = azurerm_resource_group.this.location
   name                = module.naming.user_assigned_identity.name_unique
   resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
 }
 
 # This is the module call

@@ -25,14 +25,14 @@ module "naming" {
 
 # This is required for resource modules
 resource "azurerm_resource_group" "this" {
-  name     = module.naming.resource_group.name_unique
   location = "AustraliaEast"
+  name     = module.naming.resource_group.name_unique
 }
 
 resource "random_password" "admin_password" {
   length           = 16
-  special          = true
   override_special = "!#$%&*()-_=+[]{}<>:?"
+  special          = true
 }
 
 # This is the module call

@@ -23,6 +23,19 @@ provider "azurerm" {
   skip_provider_registration = true
 }
 
+## Section to provide a random Azure region for the resource group
+# This allows us to randomize the region for the resource group.
+module "regions" {
+  source  = "Azure/regions/azurerm"
+  version = ">= 0.3.0"
+}
+
+# This allows us to randomize the region for the resource group.
+resource "random_integer" "region_index" {
+  max = length(module.regions.regions) - 1
+  min = 0
+}
+
 # This ensures we have unique CAF compliant names for our resources.
 module "naming" {
   source  = "Azure/naming/azurerm"
@@ -32,21 +45,15 @@ module "naming" {
 
 # This is required for resource modules
 resource "azurerm_resource_group" "this" {
+  location = module.regions.regions[random_integer.region_index.result].name
   name     = module.naming.resource_group.name_unique
-  location = "AustraliaEast"
-}
-
-resource "random_password" "admin_password" {
-  length           = 16
-  special          = true
-  override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
 # This is the module call
 # Do not specify location here due to the randomization above.
 # Leaving location as `null` will cause the module to use the resource group location
 # with a data source.
-module "mysql_server" {
+module "dbformysql" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
@@ -56,6 +63,23 @@ module "mysql_server" {
   administrator_login    = "mysqladmin"
   administrator_password = random_password.admin_password.result
   sku_name               = "GP_Standard_D2ds_v4"
+
+  managed_identities = {
+    user_assigned_resource_ids = [
+      azurerm_user_assigned_identity.this.id
+    ]
+  }
+
+  server_configuration = {
+    "timezone" = {
+      name  = "time_zone"
+      value = "SYSTEM"
+    },
+    "interactivetimeout" = {
+      name  = "interactive_timeout"
+      value = "600"
+    }
+  }
 }
 ```
 
@@ -70,20 +94,12 @@ The following requirements are needed by this module:
 
 - <a name="requirement_random"></a> [random](#requirement\_random) (>= 3.6.0, < 4.0.0)
 
-## Providers
-
-The following providers are used by this module:
-
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (>= 3.91.0, < 4.0.0)
-
-- <a name="provider_random"></a> [random](#provider\_random) (>= 3.6.0, < 4.0.0)
-
 ## Resources
 
 The following resources are used by this module:
 
 - [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
-- [random_password.admin_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) (resource)
+- [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) (resource)
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs
@@ -112,7 +128,7 @@ No outputs.
 
 The following Modules are called:
 
-### <a name="module_mysql_server"></a> [mysql\_server](#module\_mysql\_server)
+### <a name="module_dbformysql"></a> [dbformysql](#module\_dbformysql)
 
 Source: ../../
 
@@ -123,6 +139,12 @@ Version:
 Source: Azure/naming/azurerm
 
 Version: >= 0.4.0
+
+### <a name="module_regions"></a> [regions](#module\_regions)
+
+Source: Azure/regions/azurerm
+
+Version: >= 0.3.0
 
 <!-- markdownlint-disable-next-line MD041 -->
 ## Data Collection

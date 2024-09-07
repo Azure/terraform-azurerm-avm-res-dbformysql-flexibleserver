@@ -31,23 +31,23 @@ module "naming" {
 
 # This is required for resource modules
 resource "azurerm_resource_group" "this" {
-  name     = module.naming.resource_group.name_unique
   location = "AustraliaEast"
+  name     = module.naming.resource_group.name_unique
 }
 
 # A vnet & subnet is required for the private endpoint.
 resource "azurerm_virtual_network" "this" {
-  name                = module.naming.virtual_network.name_unique
-  location            = azurerm_resource_group.this.location
-  resource_group_name = azurerm_resource_group.this.name
   address_space       = ["192.168.0.0/24"]
+  location            = azurerm_resource_group.this.location
+  name                = module.naming.virtual_network.name_unique
+  resource_group_name = azurerm_resource_group.this.name
 }
 
 resource "azurerm_subnet" "this" {
+  address_prefixes     = ["192.168.0.0/24"]
   name                 = module.naming.subnet.name_unique
   resource_group_name  = azurerm_resource_group.this.name
   virtual_network_name = azurerm_virtual_network.this.name
-  address_prefixes     = ["192.168.0.0/24"]
 }
 
 resource "azurerm_private_dns_zone" "this" {
@@ -57,8 +57,8 @@ resource "azurerm_private_dns_zone" "this" {
 
 resource "random_password" "admin_password" {
   length           = 16
-  special          = true
   override_special = "!#$%&*()-_=+[]{}<>:?"
+  special          = true
 }
 
 module "mysql_server" {
@@ -103,14 +103,6 @@ The following requirements are needed by this module:
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 3.91.0, < 4.0.0)
 
 - <a name="requirement_random"></a> [random](#requirement\_random) (>= 3.6.0, < 4.0.0)
-
-## Providers
-
-The following providers are used by this module:
-
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (>= 3.91.0, < 4.0.0)
-
-- <a name="provider_random"></a> [random](#provider\_random) (>= 3.6.0, < 4.0.0)
 
 ## Resources
 
