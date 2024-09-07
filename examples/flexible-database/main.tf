@@ -20,7 +20,7 @@ provider "azurerm" {
 # This ensures we have unique CAF compliant names for our resources.
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = ">= 0.4.0"
+  version = ">= 0.3.0"
 }
 
 
@@ -40,7 +40,7 @@ resource "random_password" "admin_password" {
 # Do not specify location here due to the randomization above.
 # Leaving location as `null` will cause the module to use the resource group location
 # with a data source.
-module "mysql_server" {
+module "dbformysql" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
@@ -50,4 +50,11 @@ module "mysql_server" {
   administrator_login    = "mysqladmin"
   administrator_password = random_password.admin_password.result
   sku_name               = "GP_Standard_D2ds_v4"
+  databases = {
+    my_database = {
+      charset   = "utf8"
+      collation = "utf8_unicode_ci"
+      name      = module.naming.mysql_database.name_unique
+    }
+  }
 }

@@ -17,6 +17,19 @@ provider "azurerm" {
   skip_provider_registration = true
 }
 
+## Section to provide a random Azure region for the resource group
+# This allows us to randomize the region for the resource group.
+module "regions" {
+  source  = "Azure/regions/azurerm"
+  version = ">= 0.3.0"
+}
+
+# This allows us to randomize the region for the resource group.
+resource "random_integer" "region_index" {
+  min = 0
+  max = length(module.regions.regions) - 1
+}
+
 # This ensures we have unique CAF compliant names for our resources.
 module "naming" {
   source  = "Azure/naming/azurerm"
@@ -27,20 +40,14 @@ module "naming" {
 # This is required for resource modules
 resource "azurerm_resource_group" "this" {
   name     = module.naming.resource_group.name_unique
-  location = "AustraliaEast"
-}
-
-resource "random_password" "admin_password" {
-  length           = 16
-  special          = true
-  override_special = "!#$%&*()-_=+[]{}<>:?"
+  location = module.regions.regions[random_integer.region_index.result].name
 }
 
 # This is the module call
 # Do not specify location here due to the randomization above.
 # Leaving location as `null` will cause the module to use the resource group location
 # with a data source.
-module "mysql_server" {
+module "dbformysql" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
@@ -50,4 +57,21 @@ module "mysql_server" {
   administrator_login    = "mysqladmin"
   administrator_password = random_password.admin_password.result
   sku_name               = "GP_Standard_D2ds_v4"
+
+  managed_identities = {
+    user_assigned_resource_ids = [
+      azurerm_user_assigned_identity.this.id
+    ]
+  }
+
+  server_configuration = {
+    "timezone" = {
+      name  = "time_zone"
+      value = "SYSTEM"
+    },
+    "interactivetimeout" = {
+      name  = "interactive_timeout"
+      value = "600"
+    }
+  }
 }

@@ -9,31 +9,46 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = ">= 3.91.0, < 4.0.0"
+      version = ">= 3.7.0, < 4.0.0"
     }
     random = {
       source  = "hashicorp/random"
-      version = ">= 3.6.0, < 4.0.0"
+      version = ">= 3.5.0, < 4.0.0"
     }
   }
 }
 
 provider "azurerm" {
   features {}
-  skip_provider_registration = true
 }
+
+# we need the tenant id for the active directory administrator 
+data "azurerm_client_config" "this" {}
+
+## Section to provide a random Azure region for the resource group
+# This allows us to randomize the region for the resource group.
+module "regions" {
+  source  = "Azure/regions/azurerm"
+  version = ">= 0.3.0"
+}
+
+# This allows us to randomize the region for the resource group.
+resource "random_integer" "region_index" {
+  min = 0
+  max = length(module.regions.regions) - 1
+}
+## End of section to provide a random Azure region for the resource group
 
 # This ensures we have unique CAF compliant names for our resources.
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = ">= 0.4.0"
+  version = ">= 0.3.0"
 }
-
 
 # This is required for resource modules
 resource "azurerm_resource_group" "this" {
   name     = module.naming.resource_group.name_unique
-  location = "AustraliaEast"
+  location = module.regions.regions[random_integer.region_index.result].name
 }
 
 resource "random_password" "admin_password" {
@@ -42,11 +57,17 @@ resource "random_password" "admin_password" {
   override_special = "!#$%&*()-_=+[]{}<>:?"
 }
 
+resource "azurerm_user_assigned_identity" "this" {
+  name                = module.naming.user_assigned_identity.name_unique
+  resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
+}
+
 # This is the module call
 # Do not specify location here due to the randomization above.
 # Leaving location as `null` will cause the module to use the resource group location
 # with a data source.
-module "mysql_server" {
+module "dbformysql" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
@@ -56,6 +77,17 @@ module "mysql_server" {
   administrator_login    = "mysqladmin"
   administrator_password = random_password.admin_password.result
   sku_name               = "GP_Standard_D2ds_v4"
+
+  managed_identities = {
+    user_assigned_resource_ids = [
+      azurerm_user_assigned_identity.this.id
+    ]
+  }
+  active_directory_administrator = {
+    login     = "mysqladmin"
+    object_id = "6c8d236c-3463-479b-9e80-25e3dbda8ca0" # the Entra ID Group to be set up as the admin
+    tenant_id = data.azurerm_client_config.this.tenant_id
+  }
 }
 ```
 
@@ -66,24 +98,27 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.3.0)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 3.91.0, < 4.0.0)
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 3.7.0, < 4.0.0)
 
-- <a name="requirement_random"></a> [random](#requirement\_random) (>= 3.6.0, < 4.0.0)
+- <a name="requirement_random"></a> [random](#requirement\_random) (>= 3.5.0, < 4.0.0)
 
 ## Providers
 
 The following providers are used by this module:
 
-- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (>= 3.91.0, < 4.0.0)
+- <a name="provider_azurerm"></a> [azurerm](#provider\_azurerm) (>= 3.7.0, < 4.0.0)
 
-- <a name="provider_random"></a> [random](#provider\_random) (>= 3.6.0, < 4.0.0)
+- <a name="provider_random"></a> [random](#provider\_random) (>= 3.5.0, < 4.0.0)
 
 ## Resources
 
 The following resources are used by this module:
 
 - [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
+- [azurerm_user_assigned_identity.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/user_assigned_identity) (resource)
+- [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) (resource)
 - [random_password.admin_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) (resource)
+- [azurerm_client_config.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/data-sources/client_config) (data source)
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs
@@ -112,7 +147,7 @@ No outputs.
 
 The following Modules are called:
 
-### <a name="module_mysql_server"></a> [mysql\_server](#module\_mysql\_server)
+### <a name="module_dbformysql"></a> [dbformysql](#module\_dbformysql)
 
 Source: ../../
 
@@ -122,7 +157,13 @@ Version:
 
 Source: Azure/naming/azurerm
 
-Version: >= 0.4.0
+Version: >= 0.3.0
+
+### <a name="module_regions"></a> [regions](#module\_regions)
+
+Source: Azure/regions/azurerm
+
+Version: >= 0.3.0
 
 <!-- markdownlint-disable-next-line MD041 -->
 ## Data Collection

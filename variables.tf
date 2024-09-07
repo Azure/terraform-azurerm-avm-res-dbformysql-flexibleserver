@@ -1,13 +1,176 @@
-variable "name" {
+variable "administrator_login" {
   type        = string
-  description = "The name of the this resource."
+  default     = null
+  description = "(Optional) The Administrator login for the MySQL Flexible Server. Required when `create_mode` is `Default`. Changing this forces a new MySQL Flexible Server to be created."
+}
 
-  validation {
-    condition     = can(regex("TODO", var.name))
-    error_message = "The name must be TODO." # TODO remove the example below once complete:
-    #condition     = can(regex("^[a-z0-9]{5,50}$", var.name))
-    #error_message = "The name must be between 5 and 50 characters long and can only contain lowercase letters and numbers."
-  }
+variable "administrator_password" {
+  type        = string
+  default     = null
+  description = "(Optional) The Password associated with the `administrator_login` for the MySQL Flexible Server. Required when `create_mode` is `Default`."
+  sensitive   = true
+}
+
+variable "backup_retention_days" {
+  type        = number
+  default     = null
+  description = "(Optional) The backup retention days for the MySQL Flexible Server. Possible values are between `1` and `35` days. Defaults to `7`."
+}
+
+variable "create_mode" {
+  type        = string
+  default     = null
+  description = "(Optional)The creation mode which can be used to restore or replicate existing servers. Possible values are `Default`, `PointInTimeRestore`, `GeoRestore`, and `Replica`. Changing this forces a new MySQL Flexible Server to be created."
+}
+
+variable "customer_managed_key" {
+  type = object({
+    geo_backup_key_vault_key_id          = optional(string)
+    geo_backup_user_assigned_identity_id = optional(string)
+    key_vault_key_id                     = optional(string)
+    primary_user_assigned_identity_id    = optional(string)
+  })
+  default     = null
+  description = <<-EOT
+ - `geo_backup_key_vault_key_id` - (Optional) The ID of the geo backup Key Vault Key. It can't cross region and need Customer Managed Key in same region as geo backup.
+ - `geo_backup_user_assigned_identity_id` - (Optional) The geo backup user managed identity id for a Customer Managed Key. Should be added with `identity_ids`. It can't cross region and need identity in same region as geo backup.
+ - `key_vault_key_id` - (Optional) The ID of the Key Vault Key.
+ - `primary_user_assigned_identity_id` - (Optional) Specifies the primary user managed identity id for a Customer Managed Key. Should be added with `identity_ids`.
+EOT
+}
+
+variable "identity" {
+  type = object({
+    identity_ids = set(string)
+    type         = string
+  })
+  default     = null
+  description = <<-EOT
+ - `identity_ids` - (Required) A list of User Assigned Managed Identity IDs to be assigned to this MySQL Flexible Server.
+ - `type` - (Required) Specifies the type of Managed Service Identity that should be configured on this MySQL Flexible Server. The only possible value is `UserAssigned`.
+EOT
+}
+
+variable "delegated_subnet_id" {
+  type        = string
+  default     = null
+  description = "(Optional) The ID of the virtual network subnet to create the MySQL Flexible Server. Changing this forces a new MySQL Flexible Server to be created."
+}
+
+variable "geo_redundant_backup_enabled" {
+  type        = bool
+  default     = null
+  description = "(Optional) Should geo redundant backup enabled? Defaults to `false`. Changing this forces a new MySQL Flexible Server to be created."
+}
+
+variable "high_availability" {
+  type = object({
+    mode                      = string
+    standby_availability_zone = optional(string)
+  })
+  default     = null
+  description = <<-EOT
+ - `mode` - (Required) The high availability mode for the MySQL Flexible Server. Possibles values are `SameZone` and `ZoneRedundant`.
+ - `standby_availability_zone` - (Optional) Specifies the Availability Zone in which the standby Flexible Server should be located. Possible values are `1`, `2` and `3`.
+EOT
+}
+
+variable "maintenance_window" {
+  type = object({
+    day_of_week  = optional(number)
+    start_hour   = optional(number)
+    start_minute = optional(number)
+  })
+  default     = null
+  description = <<-EOT
+ - `day_of_week` - (Optional) The day of week for maintenance window. Defaults to `0`.
+ - `start_hour` - (Optional) The start hour for maintenance window. Defaults to `0`.
+ - `start_minute` - (Optional) The start minute for maintenance window. Defaults to `0`.
+EOT
+}
+
+variable "point_in_time_restore_time_in_utc" {
+  type        = string
+  default     = null
+  description = "(Optional) The point in time to restore from `creation_source_server_id` when `create_mode` is `PointInTimeRestore`. Changing this forces a new MySQL Flexible Server to be created."
+}
+
+variable "private_dns_zone_id" {
+  type        = string
+  default     = null
+  description = "(Optional) The ID of the private DNS zone to create the MySQL Flexible Server. Changing this forces a new MySQL Flexible Server to be created."
+}
+
+variable "replication_role" {
+  type        = string
+  default     = null
+  description = "(Optional) The replication role. Possible value is `None`."
+}
+
+variable "sku_name" {
+  type        = string
+  default     = null
+  description = "(Optional) The SKU Name for the MySQL Flexible Server."
+}
+
+variable "source_server_id" {
+  type        = string
+  default     = null
+  description = "(Optional)The resource ID of the source MySQL Flexible Server to be restored. Required when `create_mode` is `PointInTimeRestore`, `GeoRestore`, and `Replica`. Changing this forces a new MySQL Flexible Server to be created."
+}
+
+variable "storage" {
+  type = object({
+    auto_grow_enabled  = optional(bool)
+    io_scaling_enabled = optional(bool)
+    iops               = optional(number)
+    size_gb            = optional(number)
+  })
+  default     = null
+  description = <<-EOT
+ - `auto_grow_enabled` - (Optional) Should Storage Auto Grow be enabled? Defaults to `true`.
+ - `io_scaling_enabled` - (Optional) Should IOPS be scaled automatically? If `true`, `iops` can not be set. Defaults to `false`.
+ - `iops` - (Optional) The storage IOPS for the MySQL Flexible Server. Possible values are between `360` and `20000`.
+ - `size_gb` - (Optional) The max storage allowed for the MySQL Flexible Server. Possible values are between `20` and `16384`.
+EOT
+}
+
+variable "timeouts" {
+  type = object({
+    create = optional(string)
+    delete = optional(string)
+    read   = optional(string)
+    update = optional(string)
+  })
+  default     = null
+  description = <<-EOT
+ - `create` - (Defaults to 1 hour) Used when creating the MySQL Flexible Server.
+ - `delete` - (Defaults to 1 hour) Used when deleting the MySQL Flexible Server.
+ - `read` - (Defaults to 5 minutes) Used when retrieving the MySQL Flexible Server.
+ - `update` - (Defaults to 1 hour) Used when updating the MySQL Flexible Server.
+EOT
+}
+
+variable "mysql_version" {
+  type        = string
+  default     = null
+  description = "(Optional) The version of the MySQL Flexible Server to use. Possible values are `5.7`, and `8.0.21`. Changing this forces a new MySQL Flexible Server to be created."
+}
+
+variable "zone" {
+  type        = string
+  default     = null
+  description = "(Optional) Specifies the Availability Zone in which this MySQL Flexible Server should be located. Possible values are `1`, `2` and `3`."
+}
+
+variable "enable_telemetry" {
+  type        = bool
+  default     = true
+  description = <<DESCRIPTION
+This variable controls whether or not telemetry is enabled for the module.
+For more information see <https://aka.ms/avm/telemetryinfo>.
+If it is set to false, then no telemetry will be collected.
+DESCRIPTION
 }
 
 # This is required for most resource modules
@@ -16,27 +179,19 @@ variable "resource_group_name" {
   description = "The resource group where the resources will be deployed."
 }
 
-# required AVM interfaces
-# remove only if not supported by the resource
-# tflint-ignore: terraform_unused_declarations
-variable "customer_managed_key" {
-  type = object({
-    key_vault_resource_id = string
-    key_name              = string
-    key_version           = optional(string, null)
-    user_assigned_identity = optional(object({
-      resource_id = string
-    }), null)
-  })
+variable "location" {
+  type        = string
+  description = "Azure region where the resource should be deployed.  If null, the location will be inferred from the resource group location."
   default     = null
-  description = <<DESCRIPTION
-A map describing customer-managed keys to associate with the resource. This includes the following properties:
-- `key_vault_resource_id` - The resource ID of the Key Vault where the key is stored.
-- `key_name` - The name of the key.
-- `key_version` - (Optional) The version of the key. If not specified, the latest version is used.
-- `user_assigned_identity` - (Optional) An object representing a user-assigned identity with the following properties:
-  - `resource_id` - The resource ID of the user-assigned identity.
-DESCRIPTION  
+}
+
+variable "name" {
+  type        = string
+  description = "The name of the resource."
+  validation {
+    condition     = can(regex("^[a-z0-9-]{3,63}$", var.name))
+    error_message = "The name must be between 3 and 63 characters long and can only contain lowercase letters, numbers and dashes."
+  }
 }
 
 variable "diagnostic_settings" {
@@ -52,22 +207,8 @@ variable "diagnostic_settings" {
     event_hub_name                           = optional(string, null)
     marketplace_partner_resource_id          = optional(string, null)
   }))
-  default     = {}
-  description = <<DESCRIPTION
-A map of diagnostic settings to create on the Key Vault. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
-
-- `name` - (Optional) The name of the diagnostic setting. One will be generated if not set, however this will not be unique if you want to create multiple diagnostic setting resources.
-- `log_categories` - (Optional) A set of log categories to send to the log analytics workspace. Defaults to `[]`.
-- `log_groups` - (Optional) A set of log groups to send to the log analytics workspace. Defaults to `["allLogs"]`.
-- `metric_categories` - (Optional) A set of metric categories to send to the log analytics workspace. Defaults to `["AllMetrics"]`.
-- `log_analytics_destination_type` - (Optional) The destination type for the diagnostic setting. Possible values are `Dedicated` and `AzureDiagnostics`. Defaults to `Dedicated`.
-- `workspace_resource_id` - (Optional) The resource ID of the log analytics workspace to send logs and metrics to.
-- `storage_account_resource_id` - (Optional) The resource ID of the storage account to send logs and metrics to.
-- `event_hub_authorization_rule_resource_id` - (Optional) The resource ID of the event hub authorization rule to send logs and metrics to.
-- `event_hub_name` - (Optional) The name of the event hub. If none is specified, the default event hub will be selected.
-- `marketplace_partner_resource_id` - (Optional) The full ARM resource ID of the Marketplace resource to which you would like to send Diagnostic LogsLogs.
-DESCRIPTION  
-  nullable    = false
+  default  = {}
+  nullable = false
 
   validation {
     condition     = alltrue([for _, v in var.diagnostic_settings : contains(["Dedicated", "AzureDiagnostics"], v.log_analytics_destination_type)])
@@ -82,39 +223,32 @@ DESCRIPTION
     )
     error_message = "At least one of `workspace_resource_id`, `storage_account_resource_id`, `marketplace_partner_resource_id`, or `event_hub_authorization_rule_resource_id`, must be set."
   }
-}
-
-variable "enable_telemetry" {
-  type        = bool
-  default     = true
   description = <<DESCRIPTION
-This variable controls whether or not telemetry is enabled for the module.
-For more information see <https://aka.ms/avm/telemetryinfo>.
-If it is set to false, then no telemetry will be collected.
-DESCRIPTION
-}
+A map of diagnostic settings to create on the Key Vault. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
 
-variable "location" {
-  type        = string
-  nullable    = false
-  description = "Azure region where the resource should be deployed."
+- `name` - (Optional) The name of the diagnostic setting. One will be generated if not set, however this will not be unique if you want to create multiple diagnostic setting resources.
+- `log_categories` - (Optional) A set of log categories to send to the log analytics workspace. Defaults to `[]`.
+- `log_groups` - (Optional) A set of log groups to send to the log analytics workspace. Defaults to `["allLogs"]`.
+- `metric_categories` - (Optional) A set of metric categories to send to the log analytics workspace. Defaults to `["AllMetrics"]`.
+- `log_analytics_destination_type` - (Optional) The destination type for the diagnostic setting. Possible values are `Dedicated` and `AzureDiagnostics`. Defaults to `Dedicated`.
+- `workspace_resource_id` - (Optional) The resource ID of the log analytics workspace to send logs and metrics to.
+- `storage_account_resource_id` - (Optional) The resource ID of the storage account to send logs and metrics to.
+- `event_hub_authorization_rule_resource_id` - (Optional) The resource ID of the event hub authorization rule to send logs and metrics to.
+- `event_hub_name` - (Optional) The name of the event hub. If none is specified, the default event hub will be selected.
+- `marketplace_partner_resource_id` - (Optional) The full ARM resource ID of the Marketplace resource to which you would like to send Diagnostic LogsLogs.
+DESCRIPTION
 }
 
 variable "lock" {
   type = object({
-    kind = string
     name = optional(string, null)
+    kind = optional(string, "None")
   })
-  default     = null
-  description = <<DESCRIPTION
-Controls the Resource Lock configuration for this resource. The following properties can be specified:
-
-- `kind` - (Required) The type of lock. Possible values are `\"CanNotDelete\"` and `\"ReadOnly\"`.
-- `name` - (Optional) The name of the lock. If not specified, a name will be generated based on the `kind` value. Changing this forces the creation of a new resource.
-DESCRIPTION
-
+  description = "The lock level to apply. Default is `None`. Possible values are `None`, `CanNotDelete`, and `ReadOnly`."
+  default     = {}
+  nullable    = false
   validation {
-    condition     = var.lock != null ? contains(["CanNotDelete", "ReadOnly"], var.lock.kind) : true
+    condition     = contains(["CanNotDelete", "ReadOnly", "None"], var.lock.kind)
     error_message = "The lock level must be one of: 'None', 'CanNotDelete', or 'ReadOnly'."
   }
 }
@@ -125,14 +259,8 @@ variable "managed_identities" {
     system_assigned            = optional(bool, false)
     user_assigned_resource_ids = optional(set(string), [])
   })
+  description = "Managed identities to be created for the resource."
   default     = {}
-  description = <<DESCRIPTION
-Controls the Managed Identity configuration on this resource. The following properties can be specified:
-
-- `system_assigned` - (Optional) Specifies if the System Assigned Managed Identity should be enabled.
-- `user_assigned_resource_ids` - (Optional) Specifies a list of User Assigned Managed Identity resource IDs to be assigned to this resource.
-DESCRIPTION
-  nullable    = false
 }
 
 variable "private_endpoints" {
@@ -148,10 +276,10 @@ variable "private_endpoints" {
       delegated_managed_identity_resource_id = optional(string, null)
     })), {})
     lock = optional(object({
-      kind = string
       name = optional(string, null)
-    }), null)
-    tags                                    = optional(map(string), null)
+      kind = optional(string, "None")
+    }), {})
+    tags                                    = optional(map(any), null)
     subnet_resource_id                      = string
     private_dns_zone_group_name             = optional(string, "default")
     private_dns_zone_resource_ids           = optional(set(string), [])
@@ -185,18 +313,6 @@ A map of private endpoints to create on this resource. The map key is deliberate
   - `name` - The name of the IP configuration.
   - `private_ip_address` - The private IP address of the IP configuration.
 DESCRIPTION
-  nullable    = false
-}
-
-# This variable is used to determine if the private_dns_zone_group block should be included,
-# or if it is to be managed externally, e.g. using Azure Policy.
-# https://github.com/Azure/terraform-azurerm-avm-res-keyvault-vault/issues/32
-# Alternatively you can use AzAPI, which does not have this issue.
-variable "private_endpoints_manage_dns_zone_group" {
-  type        = bool
-  default     = true
-  nullable    = false
-  description = "Whether to manage private DNS zone groups with this module. If set to false, you must manage private DNS zone groups externally, e.g. using Azure Policy."
 }
 
 variable "role_assignments" {
@@ -222,13 +338,12 @@ A map of role assignments to create on this resource. The map key is deliberatel
 
 > Note: only set `skip_service_principal_aad_check` to true if you are assigning a role to a service principal.
 DESCRIPTION
-  nullable    = false
 }
-
 
 # tflint-ignore: terraform_unused_declarations
 variable "tags" {
-  type        = map(string)
-  default     = null
-  description = "(Optional) Tags of the resource."
+  type        = map(any)
+  description = "(Optional) A mapping of tags which should be assigned to the MySQL Flexible Server."
+  default     = {}
 }
+
