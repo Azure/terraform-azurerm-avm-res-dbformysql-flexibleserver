@@ -51,18 +51,18 @@ module "dbformysql" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
-  enable_telemetry       = var.enable_telemetry # see variables.tf
-  name                   = module.naming.mysql_server.name_unique
-  resource_group_name    = azurerm_resource_group.this.name
-  administrator_login    = "mysqladmin"
-  administrator_password = random_password.admin_password.result
-  sku_name               = "GP_Standard_D2ds_v4"
-
+  enable_telemetry    = var.enable_telemetry # see variables.tf
+  name                = module.naming.mysql_server.name_unique
+  resource_group_name = azurerm_resource_group.this.name
+  administrator_login = "mysqladmin"
+  //administrator_password = random_password.admin_password.result
+  sku_name = "GP_Standard_D2ds_v4"
+  /*
   managed_identities = {
     user_assigned_resource_ids = [
       azurerm_user_assigned_identity.this.id
     ]
-  }
+  } */
 
   server_configuration = {
     "timezone" = {
