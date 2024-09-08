@@ -1,11 +1,11 @@
-output "id" {
+output "resource_id" {
   description = "The ID of the resoure"
-  value       = azurerm_mysql_flexible_server.this
+  value       = azurerm_mysql_flexible_server.this.id
 }
 
-output "name" {
+output "resouce_name" {
   description = "The name of the rresource"
-  value       = azurerm_mysql_flexible_server.this.id
+  value       = azurerm_mysql_flexible_server.this.name
 }
 
 output "private_endpoints" {
