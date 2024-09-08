@@ -1,3 +1,8 @@
+variable "location" {
+  type        = string
+  description = "Azure region where the resource should be deployed.  If null, the location will be inferred from the resource group location."
+}
+
 variable "name" {
   type        = string
   description = "The name of the resource."
@@ -38,18 +43,6 @@ variable "create_mode" {
   default     = null
   description = "(Optional)The creation mode which can be used to restore or replicate existing servers. Possible values are `Default`, `PointInTimeRestore`, `GeoRestore`, and `Replica`. Changing this forces a new MySQL Flexible Server to be created."
 }
-
-/*
-variable "customer_managed_key" {
-  type = object({
-    geo_backup_key_vault_key_id          = optional(string)
-    geo_backup_user_assigned_identity_id = optional(string)
-    key_vault_key_id                     = optional(string)
-    primary_user_assigned_identity_id    = optional(string)
-  })
-  default     = null
-}
-*/
 
 variable "customer_managed_key" {
   type = object({
@@ -160,11 +153,6 @@ variable "identity" {
 EOT
 }
 
-variable "location" {
-  type        = string
-  description = "Azure region where the resource should be deployed.  If null, the location will be inferred from the resource group location."
-}
-
 variable "lock" {
   type = object({
     kind = string
@@ -226,13 +214,6 @@ variable "private_dns_zone_id" {
   description = "(Optional) The ID of the private DNS zone to create the MySQL Flexible Server. Changing this forces a new MySQL Flexible Server to be created."
 }
 
-variable "private_endpoints_manage_dns_zone_group" {
-  type        = bool
-  default     = true
-  nullable    = false
-  description = "Whether to manage private DNS zone groups with this module. If set to false, you must manage private DNS zone groups externally, e.g. using Azure Policy."
-}
-
 variable "private_endpoints" {
   type = map(object({
     name = optional(string, null)
@@ -266,7 +247,6 @@ variable "private_endpoints" {
     })), {})
   }))
   default     = {}
-  nullable    = false
   description = <<DESCRIPTION
   A map of private endpoints to create on the Key Vault. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
   
@@ -297,6 +277,14 @@ variable "private_endpoints" {
     - `name` - The name of the IP configuration.
     - `private_ip_address` - The private IP address of the IP configuration.
   DESCRIPTION
+  nullable    = false
+}
+
+variable "private_endpoints_manage_dns_zone_group" {
+  type        = bool
+  default     = true
+  description = "Whether to manage private DNS zone groups with this module. If set to false, you must manage private DNS zone groups externally, e.g. using Azure Policy."
+  nullable    = false
 }
 
 variable "replication_role" {
@@ -317,7 +305,6 @@ variable "role_assignments" {
     principal_type                         = optional(string, null)
   }))
   default     = {}
-  nullable    = false
   description = <<DESCRIPTION
   A map of role assignments to create on the MySQL Flexible Server. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
   
@@ -332,6 +319,7 @@ variable "role_assignments" {
   
   > Note: only set `skip_service_principal_aad_check` to true if you are assigning a role to a service principal.
   DESCRIPTION
+  nullable    = false
 }
 
 variable "sku_name" {
