@@ -54,6 +54,7 @@ module "dbformysql" {
   enable_telemetry    = var.enable_telemetry # see variables.tf
   name                = module.naming.mysql_server.name_unique
   resource_group_name = azurerm_resource_group.this.name
+  location            = azurerm_resource_group.this.location
   administrator_login = "mysqladmin"
   #administrator_password = random_password.admin_password.result
   sku_name = "GP_Standard_D2ds_v4"
