@@ -41,6 +41,7 @@ resource "azurerm_resource_group" "this" {
   location = "australiaeast" #module.regions.regions[random_integer.region_index.result].name
   name     = module.naming.resource_group.name_unique
 }
+
 resource "random_password" "admin_password" {
   length           = 16
   override_special = "!#$%&*()-_=+[]{}<>:?"
@@ -51,7 +52,7 @@ resource "random_password" "admin_password" {
 # Do not specify location here due to the randomization above.
 # Leaving location as `null` will cause the module to use the resource group location
 # with a data source.
-module "mysql_server" {
+module "dbformysql" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
@@ -68,4 +69,11 @@ module "mysql_server" {
     standby_availability_zone = 2
   }
   tags = null
+  databases = {
+    my_database = {
+      charset   = "utf8"
+      collation = "utf8_unicode_ci"
+      name      = module.naming.mysql_database.name_unique
+    }
+  }
 }

@@ -41,16 +41,33 @@ resource "azurerm_resource_group" "this" {
   location = "australiaeast" #module.regions.regions[random_integer.region_index.result].name
   name     = module.naming.resource_group.name_unique
 }
+
+# A vnet & subnet is required for the private endpoint.
+resource "azurerm_virtual_network" "this" {
+  address_space       = ["192.168.0.0/24"]
+  location            = azurerm_resource_group.this.location
+  name                = module.naming.virtual_network.name_unique
+  resource_group_name = azurerm_resource_group.this.name
+}
+
+resource "azurerm_subnet" "this" {
+  address_prefixes     = ["192.168.0.0/24"]
+  name                 = module.naming.subnet.name_unique
+  resource_group_name  = azurerm_resource_group.this.name
+  virtual_network_name = azurerm_virtual_network.this.name
+}
+
+resource "azurerm_private_dns_zone" "this" {
+  name                = "privatelink.mysql.database.azure.com"
+  resource_group_name = azurerm_resource_group.this.name
+}
+
 resource "random_password" "admin_password" {
   length           = 16
   override_special = "!#$%&*()-_=+[]{}<>:?"
   special          = true
 }
 
-# This is the module call
-# Do not specify location here due to the randomization above.
-# Leaving location as `null` will cause the module to use the resource group location
-# with a data source.
 module "mysql_server" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
@@ -68,4 +85,24 @@ module "mysql_server" {
     standby_availability_zone = 2
   }
   tags = null
+  private_endpoints = {
+    primary = {
+      private_dns_zone_resource_ids = [azurerm_private_dns_zone.this.id]
+      subnet_resource_id            = azurerm_subnet.this.id
+      subresource_name              = "mysqlServer"
+      tags                          = null
+    }
+  }
+}
+
+check "dns" {
+  data "azurerm_private_dns_a_record" "assertion" {
+    name                = module.naming.mysql_server.name_unique
+    zone_name           = "privatelink.mysql.database.azure.com"
+    resource_group_name = azurerm_resource_group.this.name
+  }
+  assert {
+    condition     = one(data.azurerm_private_dns_a_record.assertion.records) == one(module.mysql_server.private_endpoints["primary"].private_service_connection).private_ip_address
+    error_message = "The private DNS A record for the private endpoint is not correct."
+  }
 }

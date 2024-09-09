@@ -41,6 +41,7 @@ resource "azurerm_resource_group" "this" {
   location = "australiaeast" #module.regions.regions[random_integer.region_index.result].name
   name     = module.naming.resource_group.name_unique
 }
+
 resource "random_password" "admin_password" {
   length           = 16
   override_special = "!#$%&*()-_=+[]{}<>:?"
@@ -51,7 +52,7 @@ resource "random_password" "admin_password" {
 # Do not specify location here due to the randomization above.
 # Leaving location as `null` will cause the module to use the resource group location
 # with a data source.
-module "mysql_server" {
+module "mysql_server_with_firewall" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
@@ -68,4 +69,18 @@ module "mysql_server" {
     standby_availability_zone = 2
   }
   tags = null
+  firewall_rules = {
+    single_ip = {
+      start_ip_address = "40.112.8.12"
+      end_ip_address   = "40.112.8.12"
+    }
+    ip_range = {
+      start_ip_address = "40.112.0.0"
+      end_ip_address   = "40.112.255.255"
+    }
+    access_azure = {
+      start_ip_address = "0.0.0.0"
+      end_ip_address   = "0.0.0.0"
+    }
+  }
 }
