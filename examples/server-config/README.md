@@ -20,7 +20,6 @@ terraform {
 
 provider "azurerm" {
   features {}
-  skip_provider_registration = true
 }
 
 ## Section to provide a random Azure region for the resource group
@@ -49,6 +48,12 @@ resource "azurerm_resource_group" "this" {
   name     = module.naming.resource_group.name_unique
 }
 
+resource "random_password" "admin_password" {
+  length           = 16
+  override_special = "!#$%&*()-_=+[]{}<>:?"
+  special          = true
+}
+
 # This is the module call
 # Do not specify location here due to the randomization above.
 # Leaving location as `null` will cause the module to use the resource group location
@@ -57,13 +62,13 @@ module "dbformysql" {
   source = "../../"
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
-  enable_telemetry    = var.enable_telemetry # see variables.tf
-  name                = module.naming.mysql_server.name_unique
-  resource_group_name = azurerm_resource_group.this.name
-  location            = azurerm_resource_group.this.location
-  administrator_login = "mysqladmin"
-  #administrator_password = random_password.admin_password.result
-  sku_name = "GP_Standard_D2ds_v4"
+  enable_telemetry       = var.enable_telemetry # see variables.tf
+  name                   = module.naming.mysql_server.name_unique
+  resource_group_name    = azurerm_resource_group.this.name
+  location               = azurerm_resource_group.this.location
+  administrator_login    = "mysqladmin"
+  administrator_password = random_password.admin_password.result
+  sku_name               = "GP_Standard_D2ds_v4"
   /*
   managed_identities = {
     user_assigned_resource_ids = [
@@ -101,6 +106,7 @@ The following resources are used by this module:
 
 - [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
 - [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) (resource)
+- [random_password.admin_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) (resource)
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs
