@@ -1,8 +1,9 @@
+/*
 data "azurerm_resource_group" "parent" {
+  name  = var.resource_group_name
   count = var.location == null ? 1 : 0
-
-  name = var.resource_group_name
 }
+*/
 
 
 resource "azurerm_mysql_flexible_server" "this" {
