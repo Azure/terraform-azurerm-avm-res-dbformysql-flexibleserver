@@ -75,7 +75,12 @@ module "dbformysql" {
       azurerm_user_assigned_identity.this.id
     ]
   } */
-
+  zone = 1
+  high_availability = {
+    mode                      = "ZoneRedundant"
+    standby_availability_zone = 2
+  }
+  tags = null
   server_configuration = {
     "timezone" = {
       name  = "time_zone"

@@ -85,7 +85,12 @@ module "mysql_server" {
   administrator_login    = "mysqladmin"
   administrator_password = random_password.admin_password.result
   sku_name               = "GP_Standard_D2ds_v4"
-
+  zone                   = 1
+  high_availability = {
+    mode                      = "ZoneRedundant"
+    standby_availability_zone = 2
+  }
+  tags = null
   private_endpoints = {
     primary = {
       private_dns_zone_resource_ids = [azurerm_private_dns_zone.this.id]

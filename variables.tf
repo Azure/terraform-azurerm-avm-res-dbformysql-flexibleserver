@@ -134,7 +134,6 @@ variable "maintenance_window" {
 EOT
 }
 
-# tflint-ignore: terraform_unused_declarations
 variable "managed_identities" {
   type = object({
     system_assigned            = optional(bool, false)
@@ -292,7 +291,6 @@ variable "storage" {
 EOT
 }
 
-# tflint-ignore: terraform_unused_declarations
 variable "tags" {
   type        = map(string)
   default     = null
