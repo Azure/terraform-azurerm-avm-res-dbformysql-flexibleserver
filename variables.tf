@@ -46,6 +46,7 @@ variable "create_mode" {
 }
 
 variable "customer_managed_key" {
+  # tflint-ignore: customer_managed_key
   type = object({
     key_vault_key_id                     = string
     geo_backup_key_vault_key_id          = optional(string)
