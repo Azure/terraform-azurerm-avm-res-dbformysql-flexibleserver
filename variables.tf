@@ -46,21 +46,21 @@ variable "create_mode" {
 }
 
 variable "customer_managed_key" {
+  # tflint-ignore: customer_managed_key
   type = object({
-    key_vault_resource_id = string
-    key_name              = string
-    key_version           = optional(string, null)
-    user_assigned_identity = optional(object({
-      resource_id = string
-    }), null)
+    key_vault_key_id                     = string
+    geo_backup_key_vault_key_id          = optional(string)
+    geo_backup_user_assigned_identity_id = optional(string)
+    primary_user_assigned_identity_id    = optional(string)
   })
   default     = null
-  description = <<-EOT
- - `geo_backup_key_vault_key_id` - (Optional) The ID of the geo backup Key Vault Key. It can't cross region and need Customer Managed Key in same region as geo backup.
- - `geo_backup_user_assigned_identity_id` - (Optional) The geo backup user managed identity id for a Customer Managed Key. Should be added with `identity_ids`. It can't cross region and need identity in same region as geo backup.
- - `key_vault_key_id` - (Optional) The ID of the Key Vault Key.
- - `primary_user_assigned_identity_id` - (Optional) Specifies the primary user managed identity id for a Customer Managed Key. Should be added with `identity_ids`.
-EOT
+  description = <<DESCRIPTION
+A map describing customer-managed keys to associate with the resource. This includes the following properties:
+- `key_vault_key_id` - (Required) The ID of the Key Vault Key..
+- `geo_backup_key_vault_key_id` - (Optional) The ID of the geo backup Key Vault Key
+- `geo_backup_user_assigned_identity_id` - (Optional) The geo backup user managed identity id for a Customer Managed Key. Should be added with identity_ids
+- `primary_user_assigned_identity_id` - (Optional) Specifies the primary user managed identity id for a Customer Managed Key. Should be added with identity_ids
+DESCRIPTION  
 }
 
 variable "delegated_subnet_id" {
