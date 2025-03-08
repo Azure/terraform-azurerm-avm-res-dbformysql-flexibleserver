@@ -146,8 +146,8 @@ variable "managed_identities" {
 
 variable "mysql_version" {
   type        = string
-  default     = null
-  description = "(Optional) The version of the MySQL Flexible Server to use. Possible values are `5.7`, and `8.0.21`. Changing this forces a new MySQL Flexible Server to be created."
+  default     = "8.0.21"
+  description = "(Optional) The version of the MySQL Flexible Server to use. Possible values are `5.7`, `8.4` and `8.0.21`. Changing this forces a new MySQL Flexible Server to be created."
 }
 
 variable "point_in_time_restore_time_in_utc" {
