@@ -1,8 +1,9 @@
 variable "active_directory_administrator" {
   type = object({
-    login     = optional(string)
-    object_id = optional(string)
-    tenant_id = optional(string)
+    identity_id = string
+    login       = string
+    object_id   = string
+    tenant_id   = string
     timeouts = optional(object({
       create = optional(string)
       read   = optional(string)
