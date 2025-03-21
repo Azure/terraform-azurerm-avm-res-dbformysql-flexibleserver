@@ -251,13 +251,7 @@ object({
   })
 ```
 
-Default:
-
-```json
-{
-  "mode": "ZoneRedundant"
-}
-```
+Default: `null`
 
 ### <a name="input_lock"></a> [lock](#input\_lock)
 
