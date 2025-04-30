@@ -1,6 +1,6 @@
 variable "active_directory_administrator" {
   type = object({
-    identity_id = optional(string)
+    identity_id = string
     login       = string
     object_id   = string
     tenant_id   = string
@@ -12,7 +12,7 @@ variable "active_directory_administrator" {
     }))
   })
   description = <<-EOT
- - `identity_id` - (Optional) The resource ID of the identity used for AAD Authentication. Defaults to first identitiy assigned to the server.
+ - `identity_id` - (Required) The resource ID of the identity used for AAD Authentication. Defaults to first identitiy assigned to the server.
  - `login` - (Required) The login name of the principal to set as the server administrator.
  - `object_id` - (Required) The ID of the principal to set as the server administrator. For a managed identity, this should be the Client ID of the identity.
  - `tenant_id` - (Required) The Azure Tenant ID.

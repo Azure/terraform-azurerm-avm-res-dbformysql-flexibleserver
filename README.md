@@ -71,7 +71,7 @@ The following input variables are optional (have default values):
 
 ### <a name="input_active_directory_administrator"></a> [active\_directory\_administrator](#input\_active\_directory\_administrator)
 
-Description: - `identity_id` - (Optional) The resource ID of the identity used for AAD Authentication. Defaults to first identitiy assigned to the server.
+Description: - `identity_id` - (Required) The resource ID of the identity used for AAD Authentication. Defaults to first identitiy assigned to the server.
 - `login` - (Required) The login name of the principal to set as the server administrator.
 - `object_id` - (Required) The ID of the principal to set as the server administrator. For a managed identity, this should be the Client ID of the identity.
 - `tenant_id` - (Required) The Azure Tenant ID.
@@ -87,7 +87,7 @@ Type:
 
 ```hcl
 object({
-    identity_id = optional(string)
+    identity_id = string
     login       = string
     object_id   = string
     tenant_id   = string
