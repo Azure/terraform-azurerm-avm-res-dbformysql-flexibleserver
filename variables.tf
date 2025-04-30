@@ -60,7 +60,7 @@ A map describing customer-managed keys to associate with the resource. This incl
 - `geo_backup_key_vault_key_id` - (Optional) The ID of the geo backup Key Vault Key
 - `geo_backup_user_assigned_identity_id` - (Optional) The geo backup user managed identity id for a Customer Managed Key. Should be added with identity_ids
 - `primary_user_assigned_identity_id` - (Optional) Specifies the primary user managed identity id for a Customer Managed Key. Should be added with identity_ids
-DESCRIPTION  
+DESCRIPTION
 }
 
 variable "delegated_subnet_id" {
@@ -96,7 +96,7 @@ A map of diagnostic settings to create on the Key Vault. The map key is delibera
 - `event_hub_authorization_rule_resource_id` - (Optional) The resource ID of the event hub authorization rule to send logs and metrics to.
 - `event_hub_name` - (Optional) The name of the event hub. If none is specified, the default event hub will be selected.
 - `marketplace_partner_resource_id` - (Optional) The full ARM resource ID of the Marketplace resource to which you would like to send Diagnostic LogsLogs.
-DESCRIPTION  
+DESCRIPTION
   nullable    = false
 
   validation {
@@ -126,8 +126,8 @@ DESCRIPTION
 
 variable "geo_redundant_backup_enabled" {
   type        = bool
-  default     = null
-  description = "(Optional) Should geo redundant backup enabled? Defaults to `false`. Changing this forces a new MySQL Flexible Server to be created."
+  default     = true
+  description = "(Optional) Should geo redundant backup enabled? Defaults to `true`. Changing this forces a new MySQL Flexible Server to be created."
 }
 
 variable "high_availability" {
@@ -135,7 +135,7 @@ variable "high_availability" {
     mode                      = string
     standby_availability_zone = optional(string)
   })
-  default     = null
+  default     = { mode = "ZoneRedundant" }
   description = <<-EOT
  - `mode` - (Required) The high availability mode for the MySQL Flexible Server. Possibles values are `SameZone` and `ZoneRedundant`.
  - `standby_availability_zone` - (Optional) Specifies the Availability Zone in which the standby Flexible Server should be located. Possible values are `1`, `2` and `3`.
@@ -150,7 +150,7 @@ variable "lock" {
   default     = null
   description = <<DESCRIPTION
   Controls the Resource Lock configuration for this resource. The following properties can be specified:
-  
+
   - `kind` - (Required) The type of lock. Possible values are `\"CanNotDelete\"` and `\"ReadOnly\"`.
   - `name` - (Optional) The name of the lock. If not specified, a name will be generated based on the `kind` value. Changing this forces the creation of a new resource.
   DESCRIPTION
@@ -240,7 +240,7 @@ variable "private_endpoints" {
   default     = {}
   description = <<DESCRIPTION
   A map of private endpoints to create on the Key Vault. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
-  
+
   - `name` - (Optional) The name of the private endpoint. One will be generated if not set.
   - `role_assignments` - (Optional) A map of role assignments to create on the private endpoint. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time. See `var.role_assignments` for more information.
     - `role_definition_id_or_name` - The ID or name of the role definition to assign to the principal.
@@ -291,7 +291,7 @@ variable "role_assignments" {
   default     = {}
   description = <<DESCRIPTION
   A map of role assignments to create on the MySQL Flexible Server. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
-  
+
   - `role_definition_id_or_name` - The ID or name of the role definition to assign to the principal.
   - `principal_id` - The ID of the principal to assign the role to.
   - `description` - (Optional) The description of the role assignment.
@@ -300,7 +300,7 @@ variable "role_assignments" {
   - `condition_version` - (Optional) The version of the condition syntax. Leave as `null` if you are not using a condition, if you are then valid values are '2.0'.
   - `delegated_managed_identity_resource_id` - (Optional) The delegated Azure Resource Id which contains a Managed Identity. Changing this forces a new resource to be created. This field is only used in cross-tenant scenario.
   - `principal_type` - (Optional) The type of the `principal_id`. Possible values are `User`, `Group` and `ServicePrincipal`. It is necessary to explicitly set this attribute when creating role assignments if the principal creating the assignment is constrained by ABAC rules that filters on the PrincipalType attribute.
-  
+
   > Note: only set `skip_service_principal_aad_check` to true if you are assigning a role to a service principal.
   DESCRIPTION
   nullable    = false
