@@ -22,7 +22,7 @@ provider "azurerm" {
   features {}
 }
 
-# we need the tenant id for the active directory administrator 
+# we need the tenant id for the active directory administrator
 data "azurerm_client_config" "this" {}
 
 ## Section to provide a random Azure region for the resource group
@@ -91,9 +91,10 @@ module "dbformysql" {
     ]
   }
   active_directory_administrator = {
-    login     = "mysqladmin"
-    object_id = "6c8d236c-3463-479b-9e80-25e3dbda8ca0" # the Entra ID Group to be set up as the admin
-    tenant_id = data.azurerm_client_config.this.tenant_id
+    login       = "mysqladmin"
+    object_id   = "6c8d236c-3463-479b-9e80-25e3dbda8ca0" # the Entra ID Group to be set up as the admin
+    tenant_id   = data.azurerm_client_config.this.tenant_id
+    identity_id = azurerm_user_assigned_identity.this.id
   }
 }
 ```
