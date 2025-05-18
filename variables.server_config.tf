@@ -3,6 +3,7 @@ variable "server_configuration" {
     name  = string
     value = string
   }))
+  default     = {}
   description = <<EOT
     (Optional) A configuration block supports the following:
     object({
@@ -10,5 +11,4 @@ variable "server_configuration" {
         value = (Required) Specifies the value of the MySQL Flexible Server Configuration. See the MySQL documentation for valid values.
     })
     EOT
-  default     = {}
 }
