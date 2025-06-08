@@ -69,32 +69,32 @@ resource "azurerm_user_assigned_identity" "this" {
 # with a data source.
 module "dbformysql" {
   source = "../../"
-  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
-  # ...
-  enable_telemetry       = var.enable_telemetry # see variables.tf
-  name                   = module.naming.mysql_server.name_unique
-  resource_group_name    = azurerm_resource_group.this.name
-  location               = azurerm_resource_group.this.location
-  administrator_login    = "mysqladmin"
-  administrator_password = random_password.admin_password.result
-  sku_name               = "GP_Standard_D2ds_v4"
-  zone                   = 1
-  high_availability = {
-    mode                      = "ZoneRedundant"
-    standby_availability_zone = 2
-  }
-  tags = null
 
-  managed_identities = {
-    user_assigned_resource_ids = [
-      azurerm_user_assigned_identity.this.id
-    ]
-  }
+  location            = azurerm_resource_group.this.location
+  name                = module.naming.mysql_server.name_unique
+  resource_group_name = azurerm_resource_group.this.name
   active_directory_administrator = {
     login     = "mysqladmin"
     object_id = "6c8d236c-3463-479b-9e80-25e3dbda8ca0" # the Entra ID Group to be set up as the admin
     tenant_id = data.azurerm_client_config.this.tenant_id
   }
+  administrator_login    = "mysqladmin"
+  administrator_password = random_password.admin_password.result
+  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
+  # ...
+  enable_telemetry = var.enable_telemetry # see variables.tf
+  high_availability = {
+    mode                      = "ZoneRedundant"
+    standby_availability_zone = 2
+  }
+  managed_identities = {
+    user_assigned_resource_ids = [
+      azurerm_user_assigned_identity.this.id
+    ]
+  }
+  sku_name = "GP_Standard_D2ds_v4"
+  tags     = null
+  zone     = 1
 }
 ```
 
