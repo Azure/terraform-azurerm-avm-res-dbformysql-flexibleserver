@@ -11,6 +11,7 @@ variable "active_directory_administrator" {
       delete = optional(string)
     }))
   })
+  default     = null
   description = <<-EOT
  - `identity_id` - (Optional) The resource ID of the identity used for AAD Authentication. Defaults to first identitiy assigned to the server.
  - `login` - (Required) The login name of the principal to set as the server administrator.
@@ -24,6 +25,4 @@ variable "active_directory_administrator" {
  - `update` - (Defaults to 30 minutes) Used when updating the MySQL Flexible Server Active Directory Administrator.
  - `delete` - (Defaults to 30 minutes) Used when deleting the MySQL Flexible Server Active Directory Administrator.
 EOT
-  default     = null
 }
-
