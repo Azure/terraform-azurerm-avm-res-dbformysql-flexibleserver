@@ -1,5 +1,6 @@
 terraform {
   required_version = ">= 1.3.0"
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -54,21 +55,15 @@ resource "random_password" "admin_password" {
 # with a data source.
 module "mysql_server_with_firewall" {
   source = "../../"
-  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
-  # ...
-  enable_telemetry       = var.enable_telemetry # see variables.tf
+
+  location               = azurerm_resource_group.this.location
   name                   = module.naming.mysql_server.name_unique
   resource_group_name    = azurerm_resource_group.this.name
-  location               = azurerm_resource_group.this.location
   administrator_login    = "mysqladmin"
   administrator_password = random_password.admin_password.result
-  sku_name               = "GP_Standard_D2ds_v4"
-  zone                   = 1
-  high_availability = {
-    mode                      = "ZoneRedundant"
-    standby_availability_zone = 2
-  }
-  tags = null
+  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
+  # ...
+  enable_telemetry = var.enable_telemetry # see variables.tf
   firewall_rules = {
     single_ip = {
       start_ip_address = "40.112.8.12"
@@ -83,4 +78,11 @@ module "mysql_server_with_firewall" {
       end_ip_address   = "0.0.0.0"
     }
   }
+  high_availability = {
+    mode                      = "ZoneRedundant"
+    standby_availability_zone = 2
+  }
+  sku_name = "GP_Standard_D2ds_v4"
+  tags     = null
+  zone     = 1
 }
