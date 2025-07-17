@@ -1,5 +1,6 @@
 terraform {
   required_version = ">= 1.3.0"
+
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
@@ -44,10 +45,10 @@ resource "azurerm_resource_group" "this" {
 
 # A vnet & subnet is required for the private endpoint.
 resource "azurerm_virtual_network" "this" {
-  address_space       = ["192.168.0.0/24"]
   location            = azurerm_resource_group.this.location
   name                = module.naming.virtual_network.name_unique
   resource_group_name = azurerm_resource_group.this.name
+  address_space       = ["192.168.0.0/24"]
 }
 
 resource "azurerm_subnet" "this" {
@@ -70,21 +71,19 @@ resource "random_password" "admin_password" {
 
 module "mysql_server" {
   source = "../../"
-  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
-  # ...
-  enable_telemetry       = var.enable_telemetry # see variables.tf
+
+  location               = azurerm_resource_group.this.location
   name                   = module.naming.mysql_server.name_unique
   resource_group_name    = azurerm_resource_group.this.name
-  location               = azurerm_resource_group.this.location
   administrator_login    = "mysqladmin"
   administrator_password = random_password.admin_password.result
-  sku_name               = "GP_Standard_D2ds_v4"
-  zone                   = 1
+  # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
+  # ...
+  enable_telemetry = var.enable_telemetry # see variables.tf
   high_availability = {
     mode                      = "ZoneRedundant"
     standby_availability_zone = 2
   }
-  tags = null
   private_endpoints = {
     primary = {
       private_dns_zone_resource_ids = [azurerm_private_dns_zone.this.id]
@@ -93,6 +92,9 @@ module "mysql_server" {
       tags                          = null
     }
   }
+  sku_name = "GP_Standard_D2ds_v4"
+  tags     = null
+  zone     = 1
 }
 
 check "dns" {
