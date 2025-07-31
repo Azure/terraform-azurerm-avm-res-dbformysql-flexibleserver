@@ -72,7 +72,7 @@ The following input variables are optional (have default values):
 
 ### <a name="input_active_directory_administrator"></a> [active\_directory\_administrator](#input\_active\_directory\_administrator)
 
-Description: - `identity_id` - (Optional) The resource ID of the identity used for AAD Authentication. Defaults to first identitiy assigned to the server.
+Description: - `identity_id` - (Required) The resource ID of the identity used for AAD Authentication. Defaults to first identitiy assigned to the server.
 - `login` - (Required) The login name of the principal to set as the server administrator.
 - `object_id` - (Required) The ID of the principal to set as the server administrator. For a managed identity, this should be the Client ID of the identity.
 - `tenant_id` - (Required) The Azure Tenant ID.
@@ -88,7 +88,7 @@ Type:
 
 ```hcl
 object({
-    identity_id = optional(string)
+    identity_id = string
     login       = string
     object_id   = string
     tenant_id   = string
@@ -268,11 +268,11 @@ Default: `{}`
 
 ### <a name="input_geo_redundant_backup_enabled"></a> [geo\_redundant\_backup\_enabled](#input\_geo\_redundant\_backup\_enabled)
 
-Description: (Optional) Should geo redundant backup enabled? Defaults to `false`. Changing this forces a new MySQL Flexible Server to be created.
+Description: (Optional) Should geo redundant backup enabled? Defaults to `true`. Changing this forces a new MySQL Flexible Server to be created.
 
 Type: `bool`
 
-Default: `null`
+Default: `true`
 
 ### <a name="input_high_availability"></a> [high\_availability](#input\_high\_availability)
 
@@ -288,7 +288,13 @@ object({
   })
 ```
 
-Default: `null`
+Default:
+
+```json
+{
+  "mode": "ZoneRedundant"
+}
+```
 
 ### <a name="input_lock"></a> [lock](#input\_lock)
 
@@ -349,11 +355,11 @@ Default: `{}`
 
 ### <a name="input_mysql_version"></a> [mysql\_version](#input\_mysql\_version)
 
-Description: (Optional) The version of the MySQL Flexible Server to use. Possible values are `5.7`, and `8.0.21`. Changing this forces a new MySQL Flexible Server to be created.
+Description: (Optional) The version of the MySQL Flexible Server to use. Possible values are `5.7`, `8.4` and `8.0.21`. Changing this forces a new MySQL Flexible Server to be created.
 
 Type: `string`
 
-Default: `null`
+Default: `"8.0.21"`
 
 ### <a name="input_point_in_time_restore_time_in_utc"></a> [point\_in\_time\_restore\_time\_in\_utc](#input\_point\_in\_time\_restore\_time\_in\_utc)
 
