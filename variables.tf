@@ -276,6 +276,11 @@ variable "public_network_access" {
   type        = string
   default     = "Disabled"
   description = "(Optional) Whether public network access is allowed for the MySQL Flexible Server. Possible values are 'Enabled' or 'Disabled'. Defaults to 'Disabled'."
+
+  validation {
+    condition     = contains(["Enabled", "Disabled"], var.public_network_access)
+    error_message = "public_network_access must be either 'Enabled' or 'Disabled'."
+  }
 }
 
 variable "replication_role" {
