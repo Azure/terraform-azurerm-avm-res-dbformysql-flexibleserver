@@ -127,8 +127,8 @@ DESCRIPTION
 
 variable "geo_redundant_backup_enabled" {
   type        = bool
-  default     = null
-  description = "(Optional) Should geo redundant backup enabled? Defaults to `false`. Changing this forces a new MySQL Flexible Server to be created."
+  default     = true
+  description = "(Optional) Should geo redundant backup enabled? Defaults to `true`. Changing this forces a new MySQL Flexible Server to be created."
 }
 
 variable "high_availability" {
