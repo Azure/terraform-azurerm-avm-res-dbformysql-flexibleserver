@@ -270,11 +270,11 @@ Default: `{}`
 
 ### <a name="input_geo_redundant_backup_enabled"></a> [geo\_redundant\_backup\_enabled](#input\_geo\_redundant\_backup\_enabled)
 
-Description: (Optional) Should geo redundant backup enabled? Defaults to `false`. Changing this forces a new MySQL Flexible Server to be created.
+Description: (Optional) Should geo redundant backup enabled? Defaults to `true`. Changing this forces a new MySQL Flexible Server to be created.
 
 Type: `bool`
 
-Default: `null`
+Default: `true`
 
 ### <a name="input_high_availability"></a> [high\_availability](#input\_high\_availability)
 
