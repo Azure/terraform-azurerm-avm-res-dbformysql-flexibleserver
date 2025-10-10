@@ -6,8 +6,8 @@ resource "azurerm_mysql_flexible_server_active_directory_administrator" "this" {
     var.active_directory_administrator.identity_id,
     length(azurerm_mysql_flexible_server.this.identity[0].identity_ids) > 0 ? tolist(azurerm_mysql_flexible_server.this.identity[0].identity_ids)[0] : null
   )
-  login       = var.active_directory_administrator.login
-  object_id   = var.active_directory_administrator.object_id
-  server_id   = azurerm_mysql_flexible_server.this.id
-  tenant_id   = var.active_directory_administrator.tenant_id
+  login     = var.active_directory_administrator.login
+  object_id = var.active_directory_administrator.object_id
+  server_id = azurerm_mysql_flexible_server.this.id
+  tenant_id = var.active_directory_administrator.tenant_id
 }
