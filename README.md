@@ -290,7 +290,13 @@ object({
   })
 ```
 
-Default: `null`
+Default:
+
+```json
+{
+  "mode": "SameZone"
+}
+```
 
 ### <a name="input_lock"></a> [lock](#input\_lock)
 
