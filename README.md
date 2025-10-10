@@ -442,6 +442,14 @@ map(object({
 
 Default: `{}`
 
+### <a name="input_public_network_access"></a> [public\_network\_access](#input\_public\_network\_access)
+
+Description: (Optional) Whether public network access is allowed for the MySQL Flexible Server. Possible values are 'Enabled' or 'Disabled'. Defaults to 'Disabled'.
+
+Type: `string`
+
+Default: `"Disabled"`
+
 ### <a name="input_replication_role"></a> [replication\_role](#input\_replication\_role)
 
 Description: (Optional) The replication role. Possible value is `None`.

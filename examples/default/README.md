@@ -74,9 +74,10 @@ module "mysql_server" {
     mode                      = "ZoneRedundant"
     standby_availability_zone = 2
   }
-  sku_name = "GP_Standard_D2ds_v4"
-  tags     = null
-  zone     = 1
+  public_network_access = var.public_network_access
+  sku_name              = "GP_Standard_D2ds_v4"
+  tags                  = null
+  zone                  = 1
 }
 ```
 
@@ -117,6 +118,14 @@ If it is set to false, then no telemetry will be collected.
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_public_network_access"></a> [public\_network\_access](#input\_public\_network\_access)
+
+Description: Whether public network access is allowed for the MySQL Flexible Server. Possible values are 'Enabled' or 'Disabled'.
+
+Type: `string`
+
+Default: `"Disabled"`
 
 ## Outputs
 
