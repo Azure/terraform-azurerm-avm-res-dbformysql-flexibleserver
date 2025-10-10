@@ -136,7 +136,9 @@ variable "high_availability" {
     mode                      = string
     standby_availability_zone = optional(string)
   })
-  default     = null
+  default = {
+    mode = "SameZone"
+  }
   description = <<-EOT
  - `mode` - (Required) The high availability mode for the MySQL Flexible Server. Possibles values are `SameZone` and `ZoneRedundant`.
  - `standby_availability_zone` - (Optional) Specifies the Availability Zone in which the standby Flexible Server should be located. Possible values are `1`, `2` and `3`.
