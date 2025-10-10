@@ -278,7 +278,7 @@ Default: `null`
 
 ### <a name="input_high_availability"></a> [high\_availability](#input\_high\_availability)
 
-Description: - `mode` - (Required) The high availability mode for the MySQL Flexible Server. Possibles values are `SameZone` and `ZoneRedundant`.
+Description: - `mode` - (Required) The high availability mode for the MySQL Flexible Server. Only `ZoneRedundant` is supported. See: https://azure.github.io/Azure-Proactive-Resiliency-Library-v2/azure-resources/DBforMySQL/flexibleServers/#enable-ha-with-zone-redundancy
 - `standby_availability_zone` - (Optional) Specifies the Availability Zone in which the standby Flexible Server should be located. Possible values are `1`, `2` and `3`.
 
 Type:
@@ -290,13 +290,7 @@ object({
   })
 ```
 
-Default:
-
-```json
-{
-  "mode": "SameZone"
-}
-```
+Default: `null`
 
 ### <a name="input_lock"></a> [lock](#input\_lock)
 

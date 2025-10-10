@@ -136,13 +136,16 @@ variable "high_availability" {
     mode                      = string
     standby_availability_zone = optional(string)
   })
-  default = {
-    mode = "SameZone"
-  }
+  default     = null
   description = <<-EOT
- - `mode` - (Required) The high availability mode for the MySQL Flexible Server. Possibles values are `SameZone` and `ZoneRedundant`.
+ - `mode` - (Required) The high availability mode for the MySQL Flexible Server. Only `ZoneRedundant` is supported. See: https://azure.github.io/Azure-Proactive-Resiliency-Library-v2/azure-resources/DBforMySQL/flexibleServers/#enable-ha-with-zone-redundancy
  - `standby_availability_zone` - (Optional) Specifies the Availability Zone in which the standby Flexible Server should be located. Possible values are `1`, `2` and `3`.
 EOT
+
+  validation {
+    condition     = var.high_availability == null || var.high_availability.mode == "ZoneRedundant"
+    error_message = "Only 'ZoneRedundant' is supported for high_availability.mode in MySQL Flexible Server."
+  }
 }
 
 variable "lock" {
