@@ -37,11 +37,10 @@ resource "azurerm_mysql_flexible_server" "this" {
     }
   }
   dynamic "high_availability" {
-    for_each = var.high_availability == null ? [] : [var.high_availability]
-
+    for_each = [var.high_availability == null ? { mode = "ZoneRedundant" } : var.high_availability]
     content {
-      mode                      = high_availability.value.mode
-      standby_availability_zone = high_availability.value.standby_availability_zone
+      mode = high_availability.value.mode
+      standby_availability_zone = try(high_availability.value.standby_availability_zone, null)
     }
   }
   dynamic "identity" {
