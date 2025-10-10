@@ -6,7 +6,7 @@ This example shows how to deploy the module with a private endpoint connection.
 
 ```hcl
 terraform {
-  required_version = ">= 1.3.0"
+  required_version = "~> 1.0"
 
   required_providers {
     azurerm = {
@@ -15,7 +15,7 @@ terraform {
     }
     random = {
       source  = "hashicorp/random"
-      version = ">= 3.6.0, < 4.0.0"
+      version = "3.7.2"
     }
   }
 }
@@ -28,7 +28,7 @@ provider "azurerm" {
 # This allows us to randomize the region for the resource group.
 module "regions" {
   source  = "Azure/regions/azurerm"
-  version = ">= 0.3.0"
+  version = "0.3.0"
 }
 
 # This allows us to randomize the region for the resource group.
@@ -41,7 +41,7 @@ resource "random_integer" "region_index" {
 # This ensures we have unique CAF compliant names for our resources.
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = ">= 0.3.0"
+  version = "0.3.0"
 }
 
 # This is required for resource modules
@@ -122,11 +122,11 @@ check "dns" {
 
 The following requirements are needed by this module:
 
-- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.3.0)
+- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.0)
 
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 4.0)
 
-- <a name="requirement_random"></a> [random](#requirement\_random) (>= 3.6.0, < 4.0.0)
+- <a name="requirement_random"></a> [random](#requirement\_random) (3.7.2)
 
 ## Resources
 
@@ -136,8 +136,8 @@ The following resources are used by this module:
 - [azurerm_resource_group.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/resource_group) (resource)
 - [azurerm_subnet.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/subnet) (resource)
 - [azurerm_virtual_network.this](https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/virtual_network) (resource)
-- [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/integer) (resource)
-- [random_password.admin_password](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/password) (resource)
+- [random_integer.region_index](https://registry.terraform.io/providers/hashicorp/random/3.7.2/docs/resources/integer) (resource)
+- [random_password.admin_password](https://registry.terraform.io/providers/hashicorp/random/3.7.2/docs/resources/password) (resource)
 
 <!-- markdownlint-disable MD013 -->
 ## Required Inputs
@@ -176,13 +176,13 @@ Version:
 
 Source: Azure/naming/azurerm
 
-Version: >= 0.3.0
+Version: 0.3.0
 
 ### <a name="module_regions"></a> [regions](#module\_regions)
 
 Source: Azure/regions/azurerm
 
-Version: >= 0.3.0
+Version: 0.3.0
 
 <!-- markdownlint-disable-next-line MD041 -->
 ## Data Collection
