@@ -63,10 +63,10 @@ module "mysql_server" {
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
   enable_telemetry = var.enable_telemetry # see variables.tf
-    high_availability = {
-      mode                      = "ZoneRedundant"
-      standby_availability_zone = "2"
-    }
+  high_availability = {
+    mode                      = "ZoneRedundant"
+    standby_availability_zone = "2"
+  }
   public_network_access = var.public_network_access
   sku_name              = "GP_Standard_D2ds_v4"
   tags                  = null

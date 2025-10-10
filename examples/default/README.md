@@ -72,7 +72,7 @@ module "mysql_server" {
   enable_telemetry = var.enable_telemetry # see variables.tf
   high_availability = {
     mode                      = "ZoneRedundant"
-    standby_availability_zone = 2
+    standby_availability_zone = "2"
   }
   public_network_access = var.public_network_access
   sku_name              = "GP_Standard_D2ds_v4"
