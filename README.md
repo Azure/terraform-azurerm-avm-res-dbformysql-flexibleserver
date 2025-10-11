@@ -451,14 +451,6 @@ Type: `string`
 
 Default: `"Disabled"`
 
-### <a name="input_public_network_access_enabled"></a> [public\_network\_access\_enabled](#input\_public\_network\_access\_enabled)
-
-Description: (optional) Specify Public Network Access. true (default), false
-
-Type: `bool`
-
-Default: `true`
-
 ### <a name="input_replication_role"></a> [replication\_role](#input\_replication\_role)
 
 Description: (Optional) The replication role. Possible value is `None`.

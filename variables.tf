@@ -287,7 +287,6 @@ variable "public_network_access" {
   }
 }
 
-
 variable "replication_role" {
   type        = string
   default     = null
