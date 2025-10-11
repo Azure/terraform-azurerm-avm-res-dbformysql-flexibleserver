@@ -1,4 +1,3 @@
-
 output "resouce_name" {
   description = "The name of the rresource"
   value       = azurerm_mysql_flexible_server.this.name

@@ -586,10 +586,6 @@ Default: `null`
 
 The following outputs are exported:
 
-### <a name="output_private_endpoints"></a> [private\_endpoints](#output\_private\_endpoints)
-
-Description: A map of private endpoints. The map key is the supplied input to var.private\_endpoints. The map value is the entire azurerm\_private\_endpoint resource.
-
 ### <a name="output_resouce_name"></a> [resouce\_name](#output\_resouce\_name)
 
 Description: The name of the rresource
