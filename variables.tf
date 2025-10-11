@@ -211,7 +211,6 @@ variable "private_dns_zone_id" {
   description = "(Optional) The ID of the private DNS zone to create the MySQL Flexible Server. Changing this forces a new MySQL Flexible Server to be created."
 }
 
-
 variable "private_endpoints" {
   type = map(object({
     name = optional(string, null)
@@ -277,12 +276,6 @@ variable "private_endpoints_manage_dns_zone_group" {
   nullable    = false
 }
 
-variable "public_network_access_enabled" {
-  type        = bool
-  default     = true
-  description = "(optional) Specify Public Network Access. true (default), false"
-}
-
 variable "public_network_access" {
   type        = string
   default     = "Disabled"
@@ -292,6 +285,12 @@ variable "public_network_access" {
     condition     = contains(["Enabled", "Disabled"], var.public_network_access)
     error_message = "public_network_access must be either 'Enabled' or 'Disabled'."
   }
+}
+
+variable "public_network_access_enabled" {
+  type        = bool
+  default     = true
+  description = "(optional) Specify Public Network Access. true (default), false"
 }
 
 variable "replication_role" {
