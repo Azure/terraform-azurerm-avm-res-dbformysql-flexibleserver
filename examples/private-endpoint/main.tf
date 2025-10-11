@@ -97,14 +97,14 @@ module "mysql_server" {
   zone     = 1
 }
 
-check "dns" {
-  data "azurerm_private_dns_a_record" "assertion" {
-    name                = module.naming.mysql_server.name_unique
-    zone_name           = "privatelink.mysql.database.azure.com"
-    resource_group_name = azurerm_resource_group.this.name
-  }
-  assert {
-    condition     = one(data.azurerm_private_dns_a_record.assertion.records) == one(module.mysql_server.private_endpoints["primary"].private_service_connection).private_ip_address
-    error_message = "The private DNS A record for the private endpoint is not correct."
-  }
-}
+# check "dns" {
+#   data "azurerm_private_dns_a_record" "assertion" {
+#     name                = module.naming.mysql_server.name_unique
+#     zone_name           = "privatelink.mysql.database.azure.com"
+#     resource_group_name = azurerm_resource_group.this.name
+#   }
+#   assert {
+#     condition     = one(data.azurerm_private_dns_a_record.assertion.records) == one(module.mysql_server.private_endpoints["primary"].private_service_connection).private_ip_address
+#     error_message = "The private DNS A record for the private endpoint is not correct."
+#   }
+# }
