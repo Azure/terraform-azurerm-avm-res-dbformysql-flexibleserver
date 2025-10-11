@@ -287,11 +287,6 @@ variable "public_network_access" {
   }
 }
 
-variable "public_network_access_enabled" {
-  type        = bool
-  default     = true
-  description = "(optional) Specify Public Network Access. true (default), false"
-}
 
 variable "replication_role" {
   type        = string
