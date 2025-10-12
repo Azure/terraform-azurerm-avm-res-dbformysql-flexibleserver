@@ -24,7 +24,7 @@ provider "azurerm" {
   features {}
 }
 locals {
-  test_regions = ["Central US", "West US 2", "West US 3"]
+  test_regions = ["centralus", "westus2", "westus3"]
 }
 ## Section to provide a random Azure region for the resource group
 # This allows us to randomize the region for the resource group.

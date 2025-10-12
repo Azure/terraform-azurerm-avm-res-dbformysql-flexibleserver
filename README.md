@@ -283,7 +283,37 @@ Description: Set of Azure regions (lowercase) that currently support Zone Redund
 
 Type: `set(string)`
 
-Default: `[]`
+Default:
+
+```json
+[
+  "westus3",
+  "centralus",
+  "eastus2euap",
+  "eastus2",
+  "westus2",
+  "eastus",
+  "westeurope",
+  "northeurope",
+  "southeastasia",
+  "japaneast",
+  "japanwest",
+  "australiaeast",
+  "australiasoutheast",
+  "canadacentral",
+  "canadaeast",
+  "uksouth",
+  "ukwest",
+  "francecentral",
+  "francesouth",
+  "switzerlandnorth",
+  "switzerlandwest",
+  "germanywestcentral",
+  "germanynorth",
+  "norwayeast",
+  "norwaywest"
+]
+```
 
 ### <a name="input_high_availability"></a> [high\_availability](#input\_high\_availability)
 

@@ -133,7 +133,7 @@ variable "geo_redundant_backup_enabled" {
 
 variable "ha_supported_regions" {
   type        = set(string)
-  default     = []
+  default     = ["westus3", "centralus", "eastus2euap", "eastus2", "westus2", "eastus", "westeurope", "northeurope", "southeastasia", "japaneast", "japanwest", "australiaeast", "australiasoutheast", "canadacentral", "canadaeast", "uksouth", "ukwest", "francecentral", "francesouth", "switzerlandnorth", "switzerlandwest", "germanywestcentral", "germanynorth", "norwayeast", "norwaywest"]
   description = "Set of Azure regions (lowercase) that currently support Zone Redundant high availability for Azure Database for MySQL Flexible Server. This is used for validation when high_availability is specified. You may temporarily override this list to unblock adoption in newly supported regions until the module list is refreshed."
   nullable    = false
 }
