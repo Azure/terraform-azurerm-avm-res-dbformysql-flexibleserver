@@ -11,6 +11,10 @@ This is a Terraform module for the MySQL Flexible Server written for contributio
 >
 > However, it is important to note that this **DOES NOT** mean that the modules cannot be consumed and utilized. They **CAN** be leveraged in all types of environments (dev, test, prod etc.). Consumers can treat them just like any other IaC module and raise issues or feature requests against them as they learn from the usage of the module. Consumers should also read the release notes for each version, if considering updating to a more recent version of a module to see if there are any considerations or breaking changes etc.
 
+## Testing and Authentication
+
+For information about testing this module and Azure authentication methods, see [TESTING.md](./TESTING.md).
+
 <!-- markdownlint-disable MD033 -->
 ## Requirements
 
