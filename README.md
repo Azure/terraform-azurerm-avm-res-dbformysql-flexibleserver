@@ -277,44 +277,6 @@ Type: `bool`
 
 Default: `true`
 
-### <a name="input_ha_supported_regions"></a> [ha\_supported\_regions](#input\_ha\_supported\_regions)
-
-Description: Set of Azure regions (lowercase) that currently support Zone Redundant high availability for Azure Database for MySQL Flexible Server. This is used for validation when high\_availability is specified. You may temporarily override this list to unblock adoption in newly supported regions until the module list is refreshed.
-
-Type: `set(string)`
-
-Default:
-
-```json
-[
-  "westus3",
-  "centralus",
-  "eastus2euap",
-  "eastus2",
-  "westus2",
-  "eastus",
-  "westeurope",
-  "northeurope",
-  "southeastasia",
-  "japaneast",
-  "japanwest",
-  "australiaeast",
-  "australiasoutheast",
-  "canadacentral",
-  "canadaeast",
-  "uksouth",
-  "ukwest",
-  "francecentral",
-  "francesouth",
-  "switzerlandnorth",
-  "switzerlandwest",
-  "germanywestcentral",
-  "germanynorth",
-  "norwayeast",
-  "norwaywest"
-]
-```
-
 ### <a name="input_high_availability"></a> [high\_availability](#input\_high\_availability)
 
 Description: - `mode` - (Required) The high availability mode for the MySQL Flexible Server. Only `ZoneRedundant` is supported. See: https://azure.github.io/Azure-Proactive-Resiliency-Library-v2/azure-resources/DBforMySQL/flexibleServers/#enable-ha-with-zone-redundancy
@@ -329,7 +291,14 @@ object({
   })
 ```
 
-Default: `null`
+Default:
+
+```json
+{
+  "mode": "ZoneRedundant",
+  "standby_availability_zone": "1"
+}
+```
 
 ### <a name="input_lock"></a> [lock](#input\_lock)
 

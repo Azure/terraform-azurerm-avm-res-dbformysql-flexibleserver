@@ -131,34 +131,19 @@ variable "geo_redundant_backup_enabled" {
   description = "(Optional) Should geo redundant backup enabled? Defaults to `true`. Changing this forces a new MySQL Flexible Server to be created."
 }
 
-variable "ha_supported_regions" {
-  type        = set(string)
-  default     = ["westus3", "centralus", "eastus2euap", "eastus2", "westus2", "eastus", "westeurope", "northeurope", "southeastasia", "japaneast", "japanwest", "australiaeast", "australiasoutheast", "canadacentral", "canadaeast", "uksouth", "ukwest", "francecentral", "francesouth", "switzerlandnorth", "switzerlandwest", "germanywestcentral", "germanynorth", "norwayeast", "norwaywest"]
-  description = "Set of Azure regions (lowercase) that currently support Zone Redundant high availability for Azure Database for MySQL Flexible Server. This is used for validation when high_availability is specified. You may temporarily override this list to unblock adoption in newly supported regions until the module list is refreshed."
-  nullable    = false
-}
-
 variable "high_availability" {
   type = object({
     mode                      = string
     standby_availability_zone = optional(string)
   })
-  default     = null
-  description = <<-EOT
- - `mode` - (Required) The high availability mode for the MySQL Flexible Server. Only `ZoneRedundant` is supported. See: https://azure.github.io/Azure-Proactive-Resiliency-Library-v2/azure-resources/DBforMySQL/flexibleServers/#enable-ha-with-zone-redundancy
- - `standby_availability_zone` - (Optional) Specifies the Availability Zone in which the standby Flexible Server should be located. Possible values are `1`, `2` and `3`.
-EOT
-
-  validation {
-    condition = var.high_availability == null || (
-      var.high_availability.mode == "ZoneRedundant" && (
-        contains(var.ha_supported_regions, lower(var.location)) ||
-        # Allow user-provided location without spaces (e.g. "westus3") to match list entry with spaces ("westus3")
-        contains(var.ha_supported_regions, join(" ", regexall("[a-z0-9]+", lower(var.location))))
-      )
-    )
-    error_message = "When high_availability is set the mode must be 'ZoneRedundant' and the selected location must be in ha_supported_regions. Override var.ha_supported_regions to add newly supported regions if Azure enables Zone Redundant HA there before this module is updated."
+  default = {
+    mode                      = "ZoneRedundant"
+    standby_availability_zone = "1"
   }
+  description = <<-EOT
+  - `mode` - (Required) The high availability mode for the MySQL Flexible Server. Only `ZoneRedundant` is supported. See: https://azure.github.io/Azure-Proactive-Resiliency-Library-v2/azure-resources/DBforMySQL/flexibleServers/#enable-ha-with-zone-redundancy
+  - `standby_availability_zone` - (Optional) Specifies the Availability Zone in which the standby Flexible Server should be located. Possible values are `1`, `2` and `3`.
+  EOT
 }
 
 variable "lock" {
