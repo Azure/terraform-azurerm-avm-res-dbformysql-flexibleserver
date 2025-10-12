@@ -189,7 +189,11 @@ EOT
 
   validation {
     condition = var.high_availability == null || (
-      var.high_availability.mode == "ZoneRedundant" && contains(var.ha_supported_regions, lower(var.location))
+      var.high_availability.mode == "ZoneRedundant" && (
+        contains(var.ha_supported_regions, lower(var.location)) ||
+        # Allow user-provided location without spaces (e.g. "westus3") to match list entry with spaces ("west us 3")
+        contains(var.ha_supported_regions, join(" ", regexall("[a-z0-9]+", lower(var.location))))
+      )
     )
     error_message = "When high_availability is set the mode must be 'ZoneRedundant' and the selected location must be in ha_supported_regions. Override var.ha_supported_regions to add newly supported regions if Azure enables Zone Redundant HA there before this module is updated."
   }
