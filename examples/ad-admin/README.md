@@ -28,7 +28,7 @@ provider "azurerm" {
 data "azurerm_client_config" "this" {}
 
 locals {
-  test_regions = ["centralus", "eastus", "eastus2", "westus3"]
+  test_regions = ["West Central US", "West US 2", "West US 3"]
 }
 ## Section to provide a random Azure region for the resource group
 # This allows us to randomize the region for the resource group.
