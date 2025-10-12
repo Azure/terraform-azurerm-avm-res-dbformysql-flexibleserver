@@ -296,7 +296,7 @@ Default:
 ```json
 {
   "mode": "ZoneRedundant",
-  "standby_availability_zone": "1"
+  "standby_availability_zone": null
 }
 ```
 
