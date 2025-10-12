@@ -131,6 +131,51 @@ variable "geo_redundant_backup_enabled" {
   description = "(Optional) Should geo redundant backup enabled? Defaults to `true`. Changing this forces a new MySQL Flexible Server to be created."
 }
 
+variable "ha_supported_regions" {
+  type = set(string)
+  default = [
+    # Americas
+    "east us",
+    "east us 2",
+    "central us",
+    "north central us",
+    "south central us",
+    "west us 2",
+    "west us 3",
+    "canada central",
+    "brazil south",
+    # Europe
+    "north europe",
+    "west europe",
+    "uk south",
+    "france central",
+    "germany west central",
+    "switzerland north",
+    "sweden central",
+    "norway east",
+    "poland central",
+    # Middle East & Africa
+    "uae north",
+    "qatar central",
+    "israel central",
+    "south africa north",
+    # Asia Pacific
+    "southeast asia",
+    "east asia",
+    "japan east",
+    "japan west",
+    "korea central",
+    "korea south",
+    "central india",
+    "south india",
+    "australia east",
+    "australia central",
+    "australia central 2"
+  ]
+  description = "Set of Azure regions (lowercase) that currently support Zone Redundant high availability for Azure Database for MySQL Flexible Server. This is used for validation when high_availability is specified. You may temporarily override this list to unblock adoption in newly supported regions until the module list is refreshed."
+  nullable    = false
+}
+
 variable "high_availability" {
   type = object({
     mode                      = string
@@ -143,8 +188,10 @@ variable "high_availability" {
 EOT
 
   validation {
-    condition     = var.high_availability == null || var.high_availability.mode == "ZoneRedundant"
-    error_message = "Only 'ZoneRedundant' is supported for high_availability.mode in MySQL Flexible Server."
+    condition = var.high_availability == null || (
+      var.high_availability.mode == "ZoneRedundant" && contains(var.ha_supported_regions, lower(var.location))
+    )
+    error_message = "When high_availability is set the mode must be 'ZoneRedundant' and the selected location must be in ha_supported_regions. Override var.ha_supported_regions to add newly supported regions if Azure enables Zone Redundant HA there before this module is updated."
   }
 }
 
