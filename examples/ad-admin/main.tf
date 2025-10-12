@@ -83,7 +83,7 @@ module "dbformysql" {
   enable_telemetry = var.enable_telemetry # see variables.tf
   high_availability = {
     mode                      = "ZoneRedundant"
-    standby_availability_zone = 2
+    standby_availability_zone = "2"
   }
   managed_identities = {
     user_assigned_resource_ids = [
