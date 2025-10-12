@@ -44,6 +44,13 @@ az account show
 
 Once logged in, you can run Terraform commands and the provider will use your Azure CLI credentials.
 
+**Quick Setup**: Use the provided helper script:
+```bash
+./scripts/setup-auth.sh
+```
+
+This script will verify your Azure CLI setup and help you select the right subscription.
+
 ### 3. Service Principal - Alternative for Local/CI
 
 You can also use Service Principal authentication by setting environment variables:
