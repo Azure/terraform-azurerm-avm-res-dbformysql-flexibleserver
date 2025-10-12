@@ -153,7 +153,7 @@ EOT
     condition = var.high_availability == null || (
       var.high_availability.mode == "ZoneRedundant" && (
         contains(var.ha_supported_regions, lower(var.location)) ||
-        # Allow user-provided location without spaces (e.g. "westus3") to match list entry with spaces ("west us 3")
+        # Allow user-provided location without spaces (e.g. "westus3") to match list entry with spaces ("westus3")
         contains(var.ha_supported_regions, join(" ", regexall("[a-z0-9]+", lower(var.location))))
       )
     )
