@@ -81,7 +81,7 @@ module "dbformysql" {
       value = "600"
     }
   }
-  sku_name = "GP_Standard_D4ds_v4"
+  sku_name = "GP_Standard_D2ds_v4"
   tags     = null
   zone     = 1
 }

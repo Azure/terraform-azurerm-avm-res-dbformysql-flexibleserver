@@ -77,7 +77,7 @@ module "mysql_server" {
     standby_availability_zone = "1"
   }
   public_network_access = var.public_network_access
-  sku_name              = "GP_Standard_D4ds_v4"
+  sku_name              = "GP_Standard_D2ds_v4"
   tags                  = null
   zone                  = 1
 }
@@ -113,8 +113,8 @@ The following input variables are optional (have default values):
 
 ### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
 
-Description: This variable controls whether or not telemetry is enabled for the module.  
-For more information see <https://aka.ms/avm/telemetryinfo>.  
+Description: This variable controls whether or not telemetry is enabled for the module.
+For more information see <https://aka.ms/avm/telemetryinfo>.
 If it is set to false, then no telemetry will be collected.
 
 Type: `bool`
