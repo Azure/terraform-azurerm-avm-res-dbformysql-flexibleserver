@@ -21,7 +21,7 @@ provider "azurerm" {
 data "azurerm_client_config" "this" {}
 
 locals {
-  test_regions = ["centralus", "westeurope", "eastus2"]
+  test_regions = ["centralus", "westus", "eastus2"]
 }
 ## Section to provide a random Azure region for the resource group
 # This allows us to randomize the region for the resource group.
@@ -45,7 +45,7 @@ module "naming" {
 
 # This is required for resource modules
 resource "azurerm_resource_group" "this" {
-  location = "westeurope" # module.regions.regions[random_integer.region_index.result].name
+  location = "westus" # module.regions.regions[random_integer.region_index.result].name
   name     = module.naming.resource_group.name_unique
 }
 
