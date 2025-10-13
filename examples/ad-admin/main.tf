@@ -90,7 +90,7 @@ module "dbformysql" {
       azurerm_user_assigned_identity.this.id
     ]
   }
-  sku_name = "Standard_D16ads_v5"
+  sku_name = "Standard_D16ds_v4"
   tags     = null
   zone     = 1
 }

@@ -81,7 +81,7 @@ module "dbformysql" {
       value = "600"
     }
   }
-  sku_name = "Standard_D16ads_v5"
+  sku_name = "Standard_D16ds_v4"
   tags     = null
   zone     = 1
 }

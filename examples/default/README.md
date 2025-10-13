@@ -77,7 +77,7 @@ module "mysql_server" {
     standby_availability_zone = "1"
   }
   public_network_access = var.public_network_access
-  sku_name              = "Standard_D16ads_v5"
+  sku_name              = "Standard_D16ds_v4"
   tags                  = null
   zone                  = 1
 }

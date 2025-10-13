@@ -91,7 +91,7 @@ module "mysql_server_with_firewall" {
     mode                      = "ZoneRedundant"
     standby_availability_zone = "1"
   }
-  sku_name = "Standard_D16ads_v5"
+  sku_name = "Standard_D16ds_v4"
   tags     = null
   zone     = 1
 }
