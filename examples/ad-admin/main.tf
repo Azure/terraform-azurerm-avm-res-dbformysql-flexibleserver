@@ -90,7 +90,7 @@ module "dbformysql" {
       azurerm_user_assigned_identity.this.id
     ]
   }
-  sku_name = "GP_Standard_D2ds_v4"
+  sku_name = "Standard_E8ds_v4"
   tags     = null
   zone     = 1
 }

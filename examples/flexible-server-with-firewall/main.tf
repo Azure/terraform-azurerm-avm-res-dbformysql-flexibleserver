@@ -84,7 +84,7 @@ module "mysql_server_with_firewall" {
     mode                      = "ZoneRedundant"
     standby_availability_zone = "1"
   }
-  sku_name = "GP_Standard_D2ds_v4"
+  sku_name = "Standard_E8ds_v4"
   tags     = null
   zone     = 1
 }
