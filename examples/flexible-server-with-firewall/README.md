@@ -88,8 +88,7 @@ module "mysql_server_with_firewall" {
     }
   }
   high_availability = {
-    mode                      = "ZoneRedundant"
-    standby_availability_zone = "2"
+    mode = "ZoneRedundant"
   }
   sku_name = "GP_Standard_D2ds_v4"
   tags     = null

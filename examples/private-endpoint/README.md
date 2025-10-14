@@ -90,8 +90,7 @@ module "mysql_server" {
   # ...
   enable_telemetry = var.enable_telemetry # see variables.tf
   high_availability = {
-    mode                      = "ZoneRedundant"
-    standby_availability_zone = "2"
+    mode = "ZoneRedundant"
   }
   private_endpoints = {
     primary = {
