@@ -137,6 +137,22 @@ Type: `string`
 
 Default: `null`
 
+### <a name="input_administrator_password_wo"></a> [administrator\_password\_wo](#input\_administrator\_password\_wo)
+
+Description: (Optional) Write-only administrator password for MySQL Flexible Server. Avoids storing password in state. Mutually exclusive with administrator\_password.
+
+Type: `string`
+
+Default: `null`
+
+### <a name="input_administrator_password_wo_version"></a> [administrator\_password\_wo\_version](#input\_administrator\_password\_wo\_version)
+
+Description: (Optional) Version of the write-only administrator password. Used to rotate password.
+
+Type: `number`
+
+Default: `null`
+
 ### <a name="input_backup_retention_days"></a> [backup\_retention\_days](#input\_backup\_retention\_days)
 
 Description: (Optional) The backup retention days for the MySQL Flexible Server. Possible values are between `1` and `35` days. Defaults to `7`.
