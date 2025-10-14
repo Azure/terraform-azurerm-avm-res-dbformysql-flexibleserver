@@ -390,7 +390,7 @@ Default: `{}`
 
 ### <a name="input_mysql_version"></a> [mysql\_version](#input\_mysql\_version)
 
-Description: (Optional) The version of the MySQL Flexible Server to use. Possible values are `5.7`, and `8.0.21`. Changing this forces a new MySQL Flexible Server to be created.
+Description: (Optional) The version of the MySQL Flexible Server to use. Possible values are `5.7`, and `8.0.21`. Defaults to `8.0.21` for new servers. Changing this forces a new MySQL Flexible Server to be created.
 
 Type: `string`
 
@@ -623,10 +623,6 @@ Default: `null`
 ## Outputs
 
 The following outputs are exported:
-
-### <a name="output_resource"></a> [resource](#output\_resource)
-
-Description: This is the full output for the resource.
 
 ### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
 

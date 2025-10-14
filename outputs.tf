@@ -1,4 +1,3 @@
-
 output "resource_id" {
   description = "The ID of the resoure"
   value       = azurerm_mysql_flexible_server.this.id

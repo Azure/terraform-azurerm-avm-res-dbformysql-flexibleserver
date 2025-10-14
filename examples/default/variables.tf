@@ -8,14 +8,14 @@ If it is set to false, then no telemetry will be collected.
 DESCRIPTION
 }
 
-variable "public_network_access" {
-  type        = string
-  default     = "Disabled"
-  description = "Whether public network access is allowed for the MySQL Flexible Server. Possible values are 'Enabled' or 'Disabled'."
-}
-
 variable "mysql_version" {
   type        = string
   default     = "8.0.21"
   description = "The version of the MySQL Flexible Server to use. Possible values are '5.7' and '8.0.21'. Defaults to the latest supported version."
+}
+
+variable "public_network_access" {
+  type        = string
+  default     = "Disabled"
+  description = "Whether public network access is allowed for the MySQL Flexible Server. Possible values are 'Enabled' or 'Disabled'."
 }

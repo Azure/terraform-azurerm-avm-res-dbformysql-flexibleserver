@@ -77,6 +77,7 @@ module "mysql_server" {
   high_availability = {
     mode = "ZoneRedundant"
   }
+  mysql_version         = "8.0.21" # currently versions  "8.0.21"
   public_network_access = var.public_network_access
   sku_name              = "GP_Standard_D2ds_v4"
   tags                  = null
@@ -120,6 +121,14 @@ If it is set to false, then no telemetry will be collected.
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_mysql_version"></a> [mysql\_version](#input\_mysql\_version)
+
+Description: The version of the MySQL Flexible Server to use. Possible values are '5.7' and '8.0.21'. Defaults to the latest supported version.
+
+Type: `string`
+
+Default: `"8.0.21"`
 
 ### <a name="input_public_network_access"></a> [public\_network\_access](#input\_public\_network\_access)
 
