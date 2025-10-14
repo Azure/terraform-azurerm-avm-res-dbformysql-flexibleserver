@@ -13,3 +13,9 @@ variable "public_network_access" {
   default     = "Disabled"
   description = "Whether public network access is allowed for the MySQL Flexible Server. Possible values are 'Enabled' or 'Disabled'."
 }
+
+variable "mysql_version" {
+  type        = string
+  default     = "8.0.21"
+  description = "The version of the MySQL Flexible Server to use. Possible values are '5.7' and '8.0.21'. Defaults to the latest supported version."
+}
