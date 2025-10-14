@@ -18,6 +18,10 @@ terraform {
       source  = "hashicorp/random"
       version = ">= 3.6.0, < 4.0.0"
     }
+    time = {
+      source  = "hashicorp/time"
+      version = ">= 0.11.1, < 2.0.0"
+    }
   }
 }
 

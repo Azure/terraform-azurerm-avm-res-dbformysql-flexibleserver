@@ -1,3 +1,9 @@
+resource "time_sleep" "wait_for_server_identity" {
+  count = var.active_directory_administrator != null && var.active_directory_administrator_wait_seconds > 0 ? 1 : 0
+
+  create_duration = "${var.active_directory_administrator_wait_seconds}s"
+}
+
 resource "azurerm_mysql_flexible_server_active_directory_administrator" "this" {
   # only create the resource if the user has supplied parameters to var.active_directory_administrator.
   count = var.active_directory_administrator != null ? 1 : 0
@@ -24,7 +30,8 @@ resource "azurerm_mysql_flexible_server_active_directory_administrator" "this" {
   }
 
   # Explicit dependency to ensure server (and its identities) exist before assigning AAD administrator.
-  depends_on = [
-    azurerm_mysql_flexible_server.this
-  ]
+  depends_on = compact([
+    azurerm_mysql_flexible_server.this.id,
+    try(time_sleep.wait_for_server_identity[0].id, null)
+  ])
 }
