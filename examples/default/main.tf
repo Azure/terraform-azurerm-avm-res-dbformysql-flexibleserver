@@ -70,6 +70,7 @@ module "mysql_server" {
   high_availability = {
     mode = "ZoneRedundant"
   }
+  mysql_version         = "8.0.21" # Latest supported MySQL version
   public_network_access = var.public_network_access
   sku_name              = "GP_Standard_D2ds_v4"
   tags                  = null
