@@ -624,10 +624,6 @@ Default: `null`
 
 The following outputs are exported:
 
-### <a name="output_resouce_name"></a> [resouce\_name](#output\_resouce\_name)
-
-Description: The name of the rresource
-
 ### <a name="output_resource"></a> [resource](#output\_resource)
 
 Description: This is the full output for the resource.
@@ -635,6 +631,10 @@ Description: This is the full output for the resource.
 ### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
 
 Description: The ID of the resoure
+
+### <a name="output_resource_name"></a> [resource\_name](#output\_resource\_name)
+
+Description: The name of the resource
 
 ## Modules
 
