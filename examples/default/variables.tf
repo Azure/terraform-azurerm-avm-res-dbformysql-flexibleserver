@@ -11,7 +11,11 @@ DESCRIPTION
 variable "mysql_version" {
   type        = string
   default     = "8.4"
-  description = "The version of the MySQL Flexible Server to use. Possible values are '5.7', '8.0.21', and '8.4'. Defaults to the latest supported version."
+  description = <<DESCRIPTION
+The version of the MySQL Flexible Server to use.
+Examples of supported versions include: "5.7", "8.0.21", "8.0.40", "8.4".
+Defaults to the latest supported version when not explicitly set.
+DESCRIPTION
 }
 
 variable "public_network_access" {
