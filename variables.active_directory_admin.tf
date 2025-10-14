@@ -44,6 +44,7 @@ variable "active_directory_administrator_wait_seconds" {
   type        = number
   default     = 0
   description = "Optional delay (in seconds) to wait after server creation before attempting to configure the Active Directory Administrator. Helps mitigate transient InternalServerError responses sometimes observed immediately after server provisioning while identities propagate. Set, for example, to 60 or 120 if you encounter intermittent creation failures."
+
   validation {
     condition     = var.active_directory_administrator_wait_seconds >= 0 && var.active_directory_administrator_wait_seconds <= 600
     error_message = "active_directory_administrator_wait_seconds must be between 0 and 600 seconds."
