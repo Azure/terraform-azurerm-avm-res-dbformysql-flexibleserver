@@ -57,11 +57,13 @@ resource "random_password" "admin_password" {
 module "mysql_server" {
   source = "../../"
 
-  location               = azurerm_resource_group.this.location
-  name                   = module.naming.mysql_server.name_unique
-  resource_group_name    = azurerm_resource_group.this.name
-  administrator_login    = "mysqladmin"
-  administrator_password = random_password.admin_password.result
+  location            = azurerm_resource_group.this.location
+  name                = module.naming.mysql_server.name_unique
+  resource_group_name = azurerm_resource_group.this.name
+  administrator_login = "mysqladmin"
+  # administrator_password = random_password.admin_password.result
+  administrator_password_wo         = random_password.admin_password.result
+  administrator_password_wo_version = 1 # increment to rotate password
   # source             = "Azure/avm-<res/ptn>-<name>/azurerm"
   # ...
   enable_telemetry = var.enable_telemetry # see variables.tf

@@ -12,6 +12,8 @@ resource "azurerm_mysql_flexible_server" "this" {
   resource_group_name               = var.resource_group_name
   administrator_login               = var.administrator_login
   administrator_password            = var.administrator_password
+  administrator_password_wo         = var.administrator_password_wo
+  administrator_password_wo_version = var.administrator_password_wo_version
   backup_retention_days             = var.backup_retention_days
   create_mode                       = var.create_mode
   delegated_subnet_id               = var.delegated_subnet_id

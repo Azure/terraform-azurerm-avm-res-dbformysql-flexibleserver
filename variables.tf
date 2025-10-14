@@ -33,6 +33,19 @@ variable "administrator_password" {
   sensitive   = true
 }
 
+variable "administrator_password_wo" {
+  type        = string
+  default     = null
+  description = "(Optional) Write-only administrator password for MySQL Flexible Server. Avoids storing password in state. Mutually exclusive with administrator_password."
+  sensitive   = true
+}
+
+variable "administrator_password_wo_version" {
+  type        = number
+  default     = null
+  description = "(Optional) Version of the write-only administrator password. Used to rotate password."
+}
+
 variable "backup_retention_days" {
   type        = number
   default     = null
