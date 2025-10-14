@@ -1,7 +1,6 @@
 resource "time_sleep" "wait_for_server_identity" {
-  count = var.active_directory_administrator != null && var.active_directory_administrator_wait_seconds > 0 ? 1 : 0
-
-  create_duration = "${var.active_directory_administrator_wait_seconds}s"
+  # Always create a single sleep resource; if no wait requested or AD admin not configured, use a minimal 1s pause.
+  create_duration = "${(var.active_directory_administrator != null && var.active_directory_administrator_wait_seconds > 0) ? var.active_directory_administrator_wait_seconds : 1}s"
 }
 
 resource "azurerm_mysql_flexible_server_active_directory_administrator" "this" {
@@ -30,8 +29,8 @@ resource "azurerm_mysql_flexible_server_active_directory_administrator" "this" {
   }
 
   # Explicit dependency to ensure server (and its identities) exist before assigning AAD administrator.
-  depends_on = compact([
-    azurerm_mysql_flexible_server.this.id,
-    try(time_sleep.wait_for_server_identity[0].id, null)
-  ])
+  depends_on = [
+    azurerm_mysql_flexible_server.this,
+    time_sleep.wait_for_server_identity
+  ]
 }
