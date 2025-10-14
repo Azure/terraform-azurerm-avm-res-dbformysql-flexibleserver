@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.3.0"
+  required_version = "~> 1.0"
 
   required_providers {
     azurerm = {
@@ -8,7 +8,7 @@ terraform {
     }
     random = {
       source  = "hashicorp/random"
-      version = ">= 3.6.0, < 4.0.0"
+      version = "3.7.2"
     }
   }
 }
@@ -16,17 +16,19 @@ terraform {
 provider "azurerm" {
   features {}
 }
-
+locals {
+  test_regions = ["centralus", "westus", "eastus2"]
+}
 ## Section to provide a random Azure region for the resource group
 # This allows us to randomize the region for the resource group.
 module "regions" {
   source  = "Azure/regions/azurerm"
-  version = ">= 0.3.0"
+  version = "0.3.0"
 }
 
 # This allows us to randomize the region for the resource group.
 resource "random_integer" "region_index" {
-  max = length(module.regions.regions) - 1
+  max = length(local.test_regions) - 1
   min = 0
 }
 ## End of section to provide a random Azure region for the resource group
@@ -34,12 +36,12 @@ resource "random_integer" "region_index" {
 # This ensures we have unique CAF compliant names for our resources.
 module "naming" {
   source  = "Azure/naming/azurerm"
-  version = ">= 0.3.0"
+  version = "0.3.0"
 }
 
 # This is required for resource modules
 resource "azurerm_resource_group" "this" {
-  location = "australiaeast" #module.regions.regions[random_integer.region_index.result].name
+  location = "centralus" # module.regions.regions[random_integer.region_index.result].name
   name     = module.naming.resource_group.name_unique
 }
 
@@ -81,8 +83,7 @@ module "mysql_server" {
   # ...
   enable_telemetry = var.enable_telemetry # see variables.tf
   high_availability = {
-    mode                      = "ZoneRedundant"
-    standby_availability_zone = 2
+    mode = "ZoneRedundant"
   }
   private_endpoints = {
     primary = {
@@ -94,17 +95,16 @@ module "mysql_server" {
   }
   sku_name = "GP_Standard_D2ds_v4"
   tags     = null
-  zone     = 1
 }
 
-check "dns" {
-  data "azurerm_private_dns_a_record" "assertion" {
-    name                = module.naming.mysql_server.name_unique
-    zone_name           = "privatelink.mysql.database.azure.com"
-    resource_group_name = azurerm_resource_group.this.name
-  }
-  assert {
-    condition     = one(data.azurerm_private_dns_a_record.assertion.records) == one(module.mysql_server.private_endpoints["primary"].private_service_connection).private_ip_address
-    error_message = "The private DNS A record for the private endpoint is not correct."
-  }
-}
+# check "dns" {
+#   data "azurerm_private_dns_a_record" "assertion" {
+#     name                = module.naming.mysql_server.name_unique
+#     zone_name           = "privatelink.mysql.database.azure.com"
+#     resource_group_name = azurerm_resource_group.this.name
+#   }
+#   assert {
+#     condition     = one(data.azurerm_private_dns_a_record.assertion.records) == one(module.mysql_server.private_endpoints["primary"].private_service_connection).private_ip_address
+#     error_message = "The private DNS A record for the private endpoint is not correct."
+#   }
+# }

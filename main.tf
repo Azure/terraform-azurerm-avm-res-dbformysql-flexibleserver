@@ -18,6 +18,7 @@ resource "azurerm_mysql_flexible_server" "this" {
   geo_redundant_backup_enabled      = var.geo_redundant_backup_enabled
   point_in_time_restore_time_in_utc = var.point_in_time_restore_time_in_utc
   private_dns_zone_id               = var.private_dns_zone_id
+  public_network_access             = var.public_network_access
   replication_role                  = var.replication_role
   sku_name                          = var.sku_name
   source_server_id                  = var.source_server_id
@@ -36,11 +37,11 @@ resource "azurerm_mysql_flexible_server" "this" {
     }
   }
   dynamic "high_availability" {
-    for_each = var.high_availability == null ? [] : [var.high_availability]
+    for_each = [var.high_availability == null ? { mode = "ZoneRedundant" } : var.high_availability]
 
     content {
       mode                      = high_availability.value.mode
-      standby_availability_zone = high_availability.value.standby_availability_zone
+      standby_availability_zone = try(high_availability.value.standby_availability_zone, null)
     }
   }
   dynamic "identity" {

@@ -7,3 +7,9 @@ For more information see <https://aka.ms/avm/telemetryinfo>.
 If it is set to false, then no telemetry will be collected.
 DESCRIPTION
 }
+
+variable "public_network_access" {
+  type        = string
+  default     = "Disabled"
+  description = "Whether public network access is allowed for the MySQL Flexible Server. Possible values are 'Enabled' or 'Disabled'."
+}
