@@ -71,7 +71,7 @@ module "mysql_server" {
     mode = "ZoneRedundant"
   }
   # Use the example variable so tflint sees it in use. Adjust the default in variables.tf to test other versions.
-  mysql_version         = var.mysql_version
+  mysql_version         = "8.4"
   public_network_access = var.public_network_access
   sku_name              = "GP_Standard_D2ds_v4"
   tags                  = null

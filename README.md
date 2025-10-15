@@ -390,7 +390,7 @@ Default: `{}`
 
 ### <a name="input_mysql_version"></a> [mysql\_version](#input\_mysql\_version)
 
-Description: (Optional) The version of the MySQL Flexible Server to use. Possible values are `5.7`, and `8.0.21`. Defaults to `8.0.21` for new servers. Changing this forces a new MySQL Flexible Server to be created.
+Description: (Optional) The version of the MySQL Flexible Server to use. Possible values are `5.7`, and `8.4`. Defaults to `8.4` for new servers. Changing this forces a new MySQL Flexible Server to be created.
 
 Type: `string`
 
