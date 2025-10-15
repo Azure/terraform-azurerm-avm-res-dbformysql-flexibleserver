@@ -20,7 +20,7 @@ For information about testing this module and Azure authentication methods, see 
 
 The following requirements are needed by this module:
 
-- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.3.0)
+- <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (>= 1.3.0 , < 1.13.0)
 
 - <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.4)
 
@@ -390,7 +390,7 @@ Default: `{}`
 
 ### <a name="input_mysql_version"></a> [mysql\_version](#input\_mysql\_version)
 
-Description: (Optional) The version of the MySQL Flexible Server to use. Possible values are `5.7`, and `8.0.21`. Changing this forces a new MySQL Flexible Server to be created.
+Description: (Optional) The version of the MySQL Flexible Server to use. Supported values are `5.7` and `8.0.21`. Changing this forces a new MySQL Flexible Server to be created.
 
 Type: `string`
 
@@ -624,17 +624,13 @@ Default: `null`
 
 The following outputs are exported:
 
-### <a name="output_resouce_name"></a> [resouce\_name](#output\_resouce\_name)
-
-Description: The name of the rresource
-
-### <a name="output_resource"></a> [resource](#output\_resource)
-
-Description: This is the full output for the resource.
-
 ### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
 
 Description: The ID of the resoure
+
+### <a name="output_resource_name"></a> [resource\_name](#output\_resource\_name)
+
+Description: The name of the resource
 
 ## Modules
 
