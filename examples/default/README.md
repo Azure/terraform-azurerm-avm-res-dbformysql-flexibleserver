@@ -123,16 +123,6 @@ Type: `bool`
 
 Default: `true`
 
-### <a name="input_mysql_version"></a> [mysql\_version](#input\_mysql\_version)
-
-Description: The version of the MySQL Flexible Server to use.  
-Examples of supported versions include: "5.7", "8.0.21", "8.0.40", "8.4".  
-Defaults to the latest supported version when not explicitly set.
-
-Type: `string`
-
-Default: `"8.4"`
-
 ### <a name="input_public_network_access"></a> [public\_network\_access](#input\_public\_network\_access)
 
 Description: Whether public network access is allowed for the MySQL Flexible Server. Possible values are 'Enabled' or 'Disabled'.
