@@ -125,11 +125,11 @@ Default: `true`
 
 ### <a name="input_mysql_version"></a> [mysql\_version](#input\_mysql\_version)
 
-Description: Supported MySQL Flexible Server version to deploy. Allowed values: '5.7', '8.0.21'.
+Description: Supported MySQL Flexible Server version to deploy. Allowed values: '5.7', '8.4'.
 
 Type: `string`
 
-Default: `"8.0.21"`
+Default: `"8.4"`
 
 ### <a name="input_public_network_access"></a> [public\_network\_access](#input\_public\_network\_access)
 
