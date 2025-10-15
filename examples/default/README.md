@@ -77,8 +77,8 @@ module "mysql_server" {
   high_availability = {
     mode = "ZoneRedundant"
   }
-  # Use the example variable so tflint sees it in use. Adjust the default in variables.tf to test other versions.
-  mysql_version         = "8.4"
+  # Use the example variable so tflint sees it in use. Adjust the default in variables.tf to test other supported versions.
+  mysql_version         = var.mysql_version
   public_network_access = var.public_network_access
   sku_name              = "GP_Standard_D2ds_v4"
   tags                  = null
@@ -122,6 +122,14 @@ If it is set to false, then no telemetry will be collected.
 Type: `bool`
 
 Default: `true`
+
+### <a name="input_mysql_version"></a> [mysql\_version](#input\_mysql\_version)
+
+Description: Supported MySQL Flexible Server version to deploy. Allowed values: '5.7', '8.0.21'.
+
+Type: `string`
+
+Default: `"8.0.21"`
 
 ### <a name="input_public_network_access"></a> [public\_network\_access](#input\_public\_network\_access)
 
