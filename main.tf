@@ -39,7 +39,7 @@ resource "azurerm_mysql_flexible_server" "this" {
     }
   }
   dynamic "high_availability" {
-    for_each = [var.high_availability == null ? { mode = "ZoneRedundant" } : var.high_availability]
+    for_each = var.high_availability == null ? [] : [var.high_availability]
 
     content {
       mode                      = high_availability.value.mode

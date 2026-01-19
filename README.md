@@ -313,6 +313,8 @@ Default: `true`
 Description: - `mode` - (Required) The high availability mode for the MySQL Flexible Server. Only `ZoneRedundant` is supported. See: https://azure.github.io/Azure-Proactive-Resiliency-Library-v2/azure-resources/DBforMySQL/flexibleServers/#enable-ha-with-zone-redundancy
 - `standby_availability_zone` - (Optional) Specifies the Availability Zone in which the standby Flexible Server should be located. Possible values are `1`, `2` and `3`.
 
+> Note: Set `high_availability = null` to disable high availability.
+
 Type:
 
 ```hcl
