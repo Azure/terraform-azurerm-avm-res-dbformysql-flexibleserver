@@ -35,6 +35,7 @@ variable "administrator_password" {
 
 variable "administrator_password_wo" {
   type        = string
+  ephemeral   = true
   default     = null
   description = "(Optional) Write-only administrator password for MySQL Flexible Server. Avoids storing password in state. Mutually exclusive with administrator_password."
   sensitive   = true
