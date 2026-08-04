@@ -5,7 +5,6 @@ data "azurerm_resource_group" "parent" {
 }
 */
 
-
 resource "azurerm_mysql_flexible_server" "this" {
   location                          = var.location
   name                              = var.name
@@ -38,6 +37,7 @@ resource "azurerm_mysql_flexible_server" "this" {
       primary_user_assigned_identity_id    = customer_managed_key.value.primary_user_assigned_identity_id
     }
   }
+
   dynamic "high_availability" {
     for_each = var.high_availability == null ? [] : [var.high_availability]
 
@@ -46,6 +46,7 @@ resource "azurerm_mysql_flexible_server" "this" {
       standby_availability_zone = try(high_availability.value.standby_availability_zone, null)
     }
   }
+
   dynamic "identity" {
     for_each = length(var.managed_identities.user_assigned_resource_ids) > 0 ? { this = var.managed_identities } : {}
 
@@ -54,6 +55,7 @@ resource "azurerm_mysql_flexible_server" "this" {
       type         = "UserAssigned"
     }
   }
+
   dynamic "maintenance_window" {
     for_each = var.maintenance_window == null ? [] : [var.maintenance_window]
 
@@ -63,6 +65,7 @@ resource "azurerm_mysql_flexible_server" "this" {
       start_minute = maintenance_window.value.start_minute
     }
   }
+
   dynamic "storage" {
     for_each = var.storage == null ? [] : [var.storage]
 
@@ -73,6 +76,7 @@ resource "azurerm_mysql_flexible_server" "this" {
       size_gb            = storage.value.size_gb
     }
   }
+
   dynamic "timeouts" {
     for_each = var.timeouts == null ? [] : [var.timeouts]
 
@@ -111,6 +115,7 @@ resource "azurerm_monitor_diagnostic_setting" "this" {
       category_group = enabled_log.value
     }
   }
+
   dynamic "metric" {
     for_each = each.value.metric_categories
 
