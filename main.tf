@@ -67,10 +67,11 @@ resource "azurerm_mysql_flexible_server" "this" {
     for_each = var.storage == null ? [] : [var.storage]
 
     content {
-      auto_grow_enabled  = storage.value.auto_grow_enabled
-      io_scaling_enabled = storage.value.io_scaling_enabled
-      iops               = storage.value.iops
-      size_gb            = storage.value.size_gb
+      auto_grow_enabled   = storage.value.auto_grow_enabled
+      io_scaling_enabled  = storage.value.io_scaling_enabled
+      iops                = storage.value.iops
+      log_on_disk_enabled = storage.value.log_on_disk_enabled
+      size_gb             = storage.value.size_gb
     }
   }
   dynamic "timeouts" {
