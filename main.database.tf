@@ -19,4 +19,3 @@ resource "azurerm_mysql_flexible_database" "this" {
 }
 
 # TODO add role assignment (& locks?) for RBAC scoped to the database
-
