@@ -16,9 +16,11 @@ terraform {
 provider "azurerm" {
   features {}
 }
+
 locals {
   test_regions = ["centralus", "westus", "eastus2"]
 }
+
 ## Section to provide a random Azure region for the resource group
 # This allows us to randomize the region for the resource group.
 module "regions" {
@@ -31,6 +33,7 @@ resource "random_integer" "region_index" {
   max = length(local.test_regions) - 1
   min = 0
 }
+
 ## End of section to provide a random Azure region for the resource group
 
 # This ensures we have unique CAF compliant names for our resources.
@@ -44,6 +47,7 @@ resource "azurerm_resource_group" "this" {
   location = "centralus" # module.regions.regions[random_integer.region_index.result].name
   name     = module.naming.resource_group.name_unique
 }
+
 resource "random_password" "admin_password" {
   length           = 16
   override_special = "!#$%&*()-_=+[]{}<>:?"
