@@ -348,16 +348,18 @@ variable "source_server_id" {
 
 variable "storage" {
   type = object({
-    auto_grow_enabled  = optional(bool)
-    io_scaling_enabled = optional(bool)
-    iops               = optional(number)
-    size_gb            = optional(number)
+    auto_grow_enabled   = optional(bool)
+    io_scaling_enabled  = optional(bool)
+    iops                = optional(number)
+    log_on_disk_enabled = optional(bool)
+    size_gb             = optional(number)
   })
   default     = null
   description = <<-EOT
  - `auto_grow_enabled` - (Optional) Should Storage Auto Grow be enabled? Defaults to `true`.
  - `io_scaling_enabled` - (Optional) Should IOPS be scaled automatically? If `true`, `iops` can not be set. Defaults to `false`.
  - `iops` - (Optional) The storage IOPS for the MySQL Flexible Server. Possible values are between `360` and `20000`.
+ - `log_on_disk_enabled` - (Optional) Should Storage Log On Disk be enabled? Defaults to `false`.
  - `size_gb` - (Optional) The max storage allowed for the MySQL Flexible Server. Possible values are between `20` and `16384`.
 EOT
 }
