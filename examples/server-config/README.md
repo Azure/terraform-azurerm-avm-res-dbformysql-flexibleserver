@@ -27,6 +27,7 @@ provider "azurerm" {
 locals {
   test_regions = ["West Central US", "West US 2", "West US 3"]
 }
+
 ## Section to provide a random Azure region for the resource group
 # This allows us to randomize the region for the resource group.
 module "regions" {
@@ -45,7 +46,6 @@ module "naming" {
   source  = "Azure/naming/azurerm"
   version = "0.4.0"
 }
-
 
 # This is required for resource modules
 resource "azurerm_resource_group" "this" {
