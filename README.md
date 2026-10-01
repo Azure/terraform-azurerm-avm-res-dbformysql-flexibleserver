@@ -624,6 +624,10 @@ Default: `null`
 
 The following outputs are exported:
 
+### <a name="output_resource"></a> [resource](#output\_resource)
+
+Description: This is the full output of the resource.
+
 ### <a name="output_resource_fqdn"></a> [resource\_fqdn](#output\_resource\_fqdn)
 
 Description: The fully qualified domain name of the MySQL Flexible Server.
