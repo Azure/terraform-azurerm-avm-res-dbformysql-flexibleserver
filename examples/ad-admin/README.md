@@ -30,6 +30,7 @@ data "azurerm_client_config" "this" {}
 locals {
   test_regions = ["centralus", "westus", "eastus2"]
 }
+
 ## Section to provide a random Azure region for the resource group
 # This allows us to randomize the region for the resource group.
 module "regions" {
@@ -42,6 +43,7 @@ resource "random_integer" "region_index" {
   max = length(local.test_regions) - 1
   min = 0
 }
+
 ## End of section to provide a random Azure region for the resource group
 
 # This ensures we have unique CAF compliant names for our resources.
