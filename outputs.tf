@@ -10,7 +10,7 @@ output "resource_fqdn" {
 }
 
 output "resource_id" {
-  description = "The ID of the resoure"
+  description = "The ID of the resource"
   value       = azurerm_mysql_flexible_server.this.id
 }
 
