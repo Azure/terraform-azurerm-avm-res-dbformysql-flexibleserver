@@ -60,6 +60,8 @@ variable "create_mode" {
 }
 
 variable "customer_managed_key" {
+  # MySQL needs separate primary/geo-backup key URIs and identity ARM IDs.
+  # tflint-ignore: avm_interface_customer_managed_key
   type = object({
     key_vault_key_id                     = string
     geo_backup_key_vault_key_id          = optional(string)
