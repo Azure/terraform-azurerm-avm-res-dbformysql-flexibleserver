@@ -60,7 +60,8 @@ variable "create_mode" {
 }
 
 variable "customer_managed_key" {
-  # tflint-ignore: customer_managed_key
+  # MySQL needs separate primary/geo-backup key URIs and identity ARM IDs.
+  # tflint-ignore: avm_interface_customer_managed_key
   type = object({
     key_vault_key_id                     = string
     geo_backup_key_vault_key_id          = optional(string)
@@ -239,13 +240,10 @@ variable "private_endpoints" {
     lock = optional(object({
       kind = string
       name = optional(string, null)
-    }), null)                                        # see https://azure.github.io/Azure-Verified-Modules/Azure-Verified-Modules/specs/shared/interfaces/#resource-locks
-    tags               = optional(map(string), null) # see https://azure.github.io/Azure-Verified-Modules/Azure-Verified-Modules/specs/shared/interfaces/#tags
-    subnet_resource_id = string
-    ## You only need to expose the subresource_name if there are multiple underlying services, e.g. storage.
-    ## Which has blob, file, etc.
-    ## If there is only one then leave this out and hardcode the value in the module.
-    subresource_name                        = string
+    }), null)                                                             # see https://azure.github.io/Azure-Verified-Modules/Azure-Verified-Modules/specs/shared/interfaces/#resource-locks
+    tags                                    = optional(map(string), null) # see https://azure.github.io/Azure-Verified-Modules/Azure-Verified-Modules/specs/shared/interfaces/#tags
+    subnet_resource_id                      = string
+    subresource_name                        = optional(string, null)
     private_dns_zone_group_name             = optional(string, "default")
     private_dns_zone_resource_ids           = optional(set(string), [])
     application_security_group_associations = optional(map(string), {})
@@ -256,6 +254,7 @@ variable "private_endpoints" {
     ip_configurations = optional(map(object({
       name               = string
       private_ip_address = string
+      member_name        = optional(string)
     })), {})
   }))
   default     = {}
@@ -267,6 +266,7 @@ A map of private endpoints to create on the Key Vault. The map key is deliberate
 - `lock` - (Optional) The lock level to apply to the private endpoint. Default is `None`. Possible values are `None`, `CanNotDelete`, and `ReadOnly`.
 - `tags` - (Optional) A mapping of tags to assign to the private endpoint.
 - `subnet_resource_id` - The resource ID of the subnet to deploy the private endpoint in.
+- `subresource_name` - (Optional) The private endpoint service name. Defaults to `mysqlServer`.
 - `private_dns_zone_group_name` - (Optional) The name of the private DNS zone group. One will be generated if not set.
 - `private_dns_zone_resource_ids` - (Optional) A set of resource IDs of private DNS zones to associate with the private endpoint. If not set, no zone groups will be created and the private endpoint will not be associated with any private DNS zones. DNS records must be managed external to this module.
 - `application_security_group_resource_ids` - (Optional) A map of resource IDs of application security groups to associate with the private endpoint. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
@@ -277,6 +277,7 @@ A map of private endpoints to create on the Key Vault. The map key is deliberate
 - `ip_configurations` - (Optional) A map of IP configurations to create on the private endpoint. If not specified the platform will create one. The map key is deliberately arbitrary to avoid issues where map keys maybe unknown at plan time.
   - `name` - The name of the IP configuration.
   - `private_ip_address` - The private IP address of the IP configuration.
+  - `member_name` - (Optional) The IP configuration member name. Defaults to the private endpoint service name.
 DESCRIPTION
   nullable    = false
 }
