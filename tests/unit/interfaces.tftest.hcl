@@ -44,6 +44,11 @@ run "defaults" {
     condition     = length(azurerm_private_endpoint.this_managed_dns_zone_groups) == 0 && length(azurerm_private_endpoint.this_unmanaged_dns_zone_groups) == 0
     error_message = "No private endpoint should be created by default."
   }
+
+  assert {
+    condition     = length(azurerm_private_endpoint_application_security_group_association.this) == 0
+    error_message = "No ASG association should be created without private endpoints."
+  }
 }
 
 run "mysql_version_5_7" {
@@ -208,7 +213,8 @@ run "unmanaged_endpoint_default_service" {
       one(one(azurerm_private_endpoint.this_unmanaged_dns_zone_groups["primary"].private_service_connection).subresource_names) == "mysqlServer" &&
       one(azurerm_private_endpoint.this_unmanaged_dns_zone_groups["primary"].ip_configuration).member_name == "mysqlServer" &&
       one(azurerm_private_endpoint.this_unmanaged_dns_zone_groups["primary"].ip_configuration).subresource_name == "mysqlServer" &&
-      length(azurerm_private_endpoint.this_unmanaged_dns_zone_groups["primary"].private_dns_zone_group) == 0
+      length(azurerm_private_endpoint.this_unmanaged_dns_zone_groups["primary"].private_dns_zone_group) == 0 &&
+      length(azurerm_private_endpoint_application_security_group_association.this) == 0
     )
     error_message = "Unmanaged endpoints must use the MySQL service without creating a DNS zone group when no zones are supplied."
   }
