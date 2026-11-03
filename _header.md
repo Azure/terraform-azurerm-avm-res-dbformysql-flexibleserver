@@ -9,6 +9,12 @@ This is a Terraform module for the MySQL Flexible Server written for contributio
 >
 > However, it is important to note that this **DOES NOT** mean that the modules cannot be consumed and utilized. They **CAN** be leveraged in all types of environments (dev, test, prod etc.). Consumers can treat them just like any other IaC module and raise issues or feature requests against them as they learn from the usage of the module. Consumers should also read the release notes for each version, if considering updating to a more recent version of a module to see if there are any considerations or breaking changes etc.
 
+## MySQL versions and provider requirements
+
+This module requires AzureRM `>= 4.55.0, < 5.0.0`; version 4.55.0 introduced support for MySQL `8.4`. Consumers whose `.terraform.lock.hcl` selects an older AzureRM version must run `terraform init -upgrade` and review the resulting provider selections and plan before applying.
+
+The root `mysql_version` default remains `null`, leaving version selection to the provider and Azure. The default example continues to request `8.0.21`, Azure's accepted input for the MySQL 8.0 line with Azure-managed minor updates. Versions `5.7` and `8.0.21` remain accepted inputs; Azure service availability and supported upgrade paths still apply. Adding `8.4` support does not upgrade existing servers automatically.
+
 ## Testing and Authentication
 
 For information about testing this module and Azure authentication methods, see [TESTING.md](./TESTING.md).
