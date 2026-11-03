@@ -129,7 +129,7 @@ Default: `true`
 
 ### <a name="input_mysql_version"></a> [mysql\_version](#input\_mysql\_version)
 
-Description: Supported MySQL Flexible Server version to deploy. Allowed values: '5.7', '8.0.21'.
+Description: The MySQL Flexible Server version to deploy. Supported values are `5.7`, `8.0.21`, and `8.4`. Azure accepts `8.0.21` for the MySQL 8.0 line and manages minor version updates. The example defaults to `8.0.21`.
 
 Type: `string`
 
