@@ -103,6 +103,29 @@ run "mysql_version_null" {
   }
 }
 
+run "canonical_database_encoding" {
+  command = apply
+
+  variables {
+    databases = {
+      my_database = {
+        charset   = "utf8mb3"
+        collation = "utf8mb3_unicode_ci"
+        name      = "mysql-test-db"
+      }
+    }
+  }
+
+  assert {
+    condition = (
+      azurerm_mysql_flexible_database.this["my_database"].charset == "utf8mb3" &&
+      azurerm_mysql_flexible_database.this["my_database"].collation == "utf8mb3_unicode_ci" &&
+      azurerm_mysql_flexible_database.this["my_database"].server_name == azurerm_mysql_flexible_server.this.name
+    )
+    error_message = "The database must preserve Azure's canonical three-byte UTF-8 names and target the configured server."
+  }
+}
+
 run "primary_encryption" {
   command = apply
 

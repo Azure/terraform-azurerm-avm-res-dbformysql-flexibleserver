@@ -68,8 +68,8 @@ module "dbformysql" {
   administrator_password = random_password.admin_password.result
   databases = {
     my_database = {
-      charset   = "utf8"
-      collation = "utf8_unicode_ci"
+      charset   = "utf8mb3"
+      collation = "utf8mb3_unicode_ci"
       name      = module.naming.mysql_database.name_unique
     }
   }
