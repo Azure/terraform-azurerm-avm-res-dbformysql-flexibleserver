@@ -263,8 +263,8 @@ Default: `{}`
 
 ### <a name="input_enable_telemetry"></a> [enable\_telemetry](#input\_enable\_telemetry)
 
-Description: This variable controls whether or not telemetry is enabled for the module.  
-For more information see <https://aka.ms/avm/telemetryinfo>.  
+Description: This variable controls whether or not telemetry is enabled for the module.
+For more information see <https://aka.ms/avm/telemetryinfo>.
 If it is set to false, then no telemetry will be collected.
 
 Type: `bool`
@@ -531,9 +531,9 @@ Default: `{}`
 
 ### <a name="input_server_configuration"></a> [server\_configuration](#input\_server\_configuration)
 
-Description:     (Optional) A configuration block supports the following:  
-    object({  
-        name = (Required) Specifies the name of the MySQL Flexible Server Configuration, which needs to be a valid MySQL configuration name. Changing this forces a new resource to be created.  
+Description:     (Optional) A configuration block supports the following:
+    object({
+        name = (Required) Specifies the name of the MySQL Flexible Server Configuration, which needs to be a valid MySQL configuration name. Changing this forces a new resource to be created.
         value = (Required) Specifies the value of the MySQL Flexible Server Configuration. See the MySQL documentation for valid values.
     })
 
@@ -626,7 +626,7 @@ The following outputs are exported:
 
 ### <a name="output_resource"></a> [resource](#output\_resource)
 
-Description: This is the full output of the resource.
+Description: This is the full output of the resource, including all attributes. Terraform may reject plans when password authentication is used with "Output refers to sensitive values"
 
 ### <a name="output_resource_fqdn"></a> [resource\_fqdn](#output\_resource\_fqdn)
 
@@ -634,7 +634,7 @@ Description: The fully qualified domain name of the MySQL Flexible Server.
 
 ### <a name="output_resource_id"></a> [resource\_id](#output\_resource\_id)
 
-Description: The ID of the resoure
+Description: The ID of the resource
 
 ### <a name="output_resource_name"></a> [resource\_name](#output\_resource\_name)
 

@@ -1,6 +1,7 @@
 output "resource" {
-  description = "This is the full output of the resource."
+  description = "This is the full output of the resource, including all attributes. Terraform may reject plans when password authentication is used with \"Output refers to sensitive values\""
   value       = azurerm_mysql_flexible_server.this
+  sensitive   = true
 }
 
 output "resource_fqdn" {
@@ -9,7 +10,7 @@ output "resource_fqdn" {
 }
 
 output "resource_id" {
-  description = "The ID of the resoure"
+  description = "The ID of the resource"
   value       = azurerm_mysql_flexible_server.this.id
 }
 
