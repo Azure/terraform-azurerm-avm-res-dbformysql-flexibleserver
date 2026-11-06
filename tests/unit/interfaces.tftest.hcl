@@ -31,6 +31,11 @@ run "defaults" {
   command = apply
 
   assert {
+    condition     = var.mysql_version == null
+    error_message = "Omitting mysql_version must leave version selection unset by the module."
+  }
+
+  assert {
     condition     = length(azurerm_mysql_flexible_server.this.customer_managed_key) == 0 && length(azurerm_mysql_flexible_server.this.identity) == 0
     error_message = "Omitting encryption and identity inputs must not configure them."
   }
@@ -38,6 +43,86 @@ run "defaults" {
   assert {
     condition     = length(azurerm_private_endpoint.this_managed_dns_zone_groups) == 0 && length(azurerm_private_endpoint.this_unmanaged_dns_zone_groups) == 0
     error_message = "No private endpoint should be created by default."
+  }
+
+  assert {
+    condition     = length(azurerm_private_endpoint_application_security_group_association.this) == 0
+    error_message = "No ASG association should be created without private endpoints."
+  }
+}
+
+run "mysql_version_5_7" {
+  command = apply
+
+  variables {
+    mysql_version = "5.7"
+  }
+
+  assert {
+    condition     = azurerm_mysql_flexible_server.this.version == "5.7"
+    error_message = "MySQL 5.7 must reach the server unchanged."
+  }
+}
+
+run "mysql_version_8_0" {
+  command = apply
+
+  variables {
+    mysql_version = "8.0.21"
+  }
+
+  assert {
+    condition     = azurerm_mysql_flexible_server.this.version == "8.0.21"
+    error_message = "MySQL 8.0.21 must reach the server unchanged."
+  }
+}
+
+run "mysql_version_8_4" {
+  command = apply
+
+  variables {
+    mysql_version = "8.4"
+  }
+
+  assert {
+    condition     = azurerm_mysql_flexible_server.this.version == "8.4"
+    error_message = "MySQL 8.4 must reach the server unchanged."
+  }
+}
+
+run "mysql_version_null" {
+  command = apply
+
+  variables {
+    mysql_version = null
+  }
+
+  assert {
+    condition     = var.mysql_version == null
+    error_message = "Explicit null must leave version selection unset by the module."
+  }
+}
+
+run "canonical_database_encoding" {
+  command = apply
+
+  variables {
+    databases = {
+      my_database = {
+        charset   = "utf8mb3"
+        collation = "utf8mb3_unicode_ci"
+        name      = "mysql-test-db"
+      }
+    }
+  }
+
+  assert {
+    condition = (
+      azurerm_mysql_flexible_database.this["my_database"].charset == "utf8mb3" &&
+      azurerm_mysql_flexible_database.this["my_database"].collation == "utf8mb3_unicode_ci" &&
+      azurerm_mysql_flexible_database.this["my_database"].server_name == azurerm_mysql_flexible_server.this.name
+    )
+    error_message = "The database must preserve Azure's canonical three-byte UTF-8 names and target the configured server."
   }
 }
 
@@ -151,7 +236,8 @@ run "unmanaged_endpoint_default_service" {
       one(one(azurerm_private_endpoint.this_unmanaged_dns_zone_groups["primary"].private_service_connection).subresource_names) == "mysqlServer" &&
       one(azurerm_private_endpoint.this_unmanaged_dns_zone_groups["primary"].ip_configuration).member_name == "mysqlServer" &&
       one(azurerm_private_endpoint.this_unmanaged_dns_zone_groups["primary"].ip_configuration).subresource_name == "mysqlServer" &&
-      length(azurerm_private_endpoint.this_unmanaged_dns_zone_groups["primary"].private_dns_zone_group) == 0
+      length(azurerm_private_endpoint.this_unmanaged_dns_zone_groups["primary"].private_dns_zone_group) == 0 &&
+      length(azurerm_private_endpoint_application_security_group_association.this) == 0
     )
     error_message = "Unmanaged endpoints must use the MySQL service without creating a DNS zone group when no zones are supplied."
   }

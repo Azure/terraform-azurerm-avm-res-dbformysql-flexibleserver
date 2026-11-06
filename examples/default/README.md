@@ -9,6 +9,11 @@ terraform {
   required_version = "~> 1.0"
 
   required_providers {
+    # tflint-ignore: terraform_unused_required_providers
+    azapi = {
+      source  = "Azure/azapi"
+      version = "~> 2.12"
+    }
     azurerm = {
       source  = "hashicorp/azurerm"
       version = "~> 4.0"
@@ -96,6 +101,8 @@ The following requirements are needed by this module:
 
 - <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) (~> 1.0)
 
+- <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.12)
+
 - <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 4.0)
 
 - <a name="requirement_random"></a> [random](#requirement\_random) (3.7.2)
@@ -129,7 +136,7 @@ Default: `true`
 
 ### <a name="input_mysql_version"></a> [mysql\_version](#input\_mysql\_version)
 
-Description: Supported MySQL Flexible Server version to deploy. Allowed values: '5.7', '8.0.21'.
+Description: The MySQL Flexible Server version to deploy. Supported values are `5.7`, `8.0.21`, and `8.4`. Azure accepts `8.0.21` for the MySQL 8.0 line and manages minor version updates. The example defaults to `8.0.21`.
 
 Type: `string`
 

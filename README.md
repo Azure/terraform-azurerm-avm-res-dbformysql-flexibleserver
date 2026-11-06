@@ -11,6 +11,12 @@ This is a Terraform module for the MySQL Flexible Server written for contributio
 >
 > However, it is important to note that this **DOES NOT** mean that the modules cannot be consumed and utilized. They **CAN** be leveraged in all types of environments (dev, test, prod etc.). Consumers can treat them just like any other IaC module and raise issues or feature requests against them as they learn from the usage of the module. Consumers should also read the release notes for each version, if considering updating to a more recent version of a module to see if there are any considerations or breaking changes etc.
 
+## MySQL versions and provider requirements
+
+This module requires AzureRM `>= 4.55.0, < 5.0.0`; version 4.55.0 introduced support for MySQL `8.4`. Consumers whose `.terraform.lock.hcl` selects an older AzureRM version must run `terraform init -upgrade` and review the resulting provider selections and plan before applying.
+
+The root `mysql_version` default remains `null`, leaving version selection to the provider and Azure. The default example continues to request `8.0.21`, Azure's accepted input for the MySQL 8.0 line with Azure-managed minor updates. Versions `5.7` and `8.0.21` remain accepted inputs; Azure service availability and supported upgrade paths still apply. Adding `8.4` support does not upgrade existing servers automatically.
+
 ## Testing and Authentication
 
 For information about testing this module and Azure authentication methods, see [TESTING.md](./TESTING.md).
@@ -24,7 +30,7 @@ The following requirements are needed by this module:
 
 - <a name="requirement_azapi"></a> [azapi](#requirement\_azapi) (~> 2.12)
 
-- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (~> 4.0)
+- <a name="requirement_azurerm"></a> [azurerm](#requirement\_azurerm) (>= 4.55.0, < 5.0.0)
 
 - <a name="requirement_time"></a> [time](#requirement\_time) (>= 0.11.1, < 2.0.0)
 
@@ -385,7 +391,7 @@ Default: `{}`
 
 ### <a name="input_mysql_version"></a> [mysql\_version](#input\_mysql\_version)
 
-Description: (Optional) The version of the MySQL Flexible Server to use. Supported values are `5.7` and `8.0.21`. Changing this forces a new MySQL Flexible Server to be created.
+Description: (Optional) The version of the MySQL Flexible Server to use. Supported values are `5.7`, `8.0.21`, and `8.4`. Azure accepts `8.0.21` for the MySQL 8.0 line and manages minor version updates. When null, the module leaves version selection to the provider and Azure. The provider updates version in place, subject to Azure's supported upgrade paths.
 
 Type: `string`
 
